@@ -1,0 +1,21 @@
+{
+  "name": "Forja · Gym, nutrición y progreso",
+  "short_name": "Forja",
+  "description": "Entrenamientos, nutrición, suplementación y progreso físico.",
+  "lang": "es",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0A0A0D",
+  "theme_color": "#0A0A0D",
+  "icons": [
+    { "src": "/icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/icons/icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "/icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "shortcuts": [
+    { "name": "Empezar entreno", "url": "/entreno" },
+    { "name": "Nutrición", "url": "/nutricion" }
+  ]
+}

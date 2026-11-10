@@ -1,0 +1,31 @@
+{
+  "name": "forja-fitness",
+  "version": "1.0.0",
+  "private": true,
+  "description": "App web PWA multiusuario para gestionar entrenamiento, nutrición, suplementación y progreso.",
+  "type": "module",
+  "engines": {
+    "node": ">=22.5"
+  },
+  "scripts": {
+    "dev": "node --watch --no-warnings server/index.js & vite --config vite.config.js",
+    "dev:server": "node --watch --no-warnings server/index.js",
+    "dev:client": "vite --config vite.config.js",
+    "build": "vite build --config vite.config.js",
+    "start": "node --no-warnings server/index.js",
+    "test": "node --no-warnings --test tests/*.test.js"
+  },
+  "dependencies": {
+    "cookie-parser": "^1.4.7",
+    "express": "^4.22.3",
+    "web-push": "^4.0.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.7.0",
+    "lucide-react": "^1.70.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^6.30.6",
+    "vite": "^5.4.21"
+  }
+}
