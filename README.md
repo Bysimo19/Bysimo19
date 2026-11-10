@@ -59,6 +59,13 @@ La PWA y las notificaciones necesitan **HTTPS** y la base de datos necesita **di
 
 Cada amigo se registra con su email desde la misma URL.
 
+**Hostinger (planes Business o Cloud, apps Node.js)**
+
+1. hPanel → Sitios web → Añadir sitio web → **Aplicación web Node.js** → importar desde GitHub (este repo y la rama).
+2. Ajustes de compilación: Node **22.x**, comando de build `npm run build`, archivo de entrada `app.js`.
+3. Variables de entorno: `DATA_DIR` con una carpeta fuera de la app (p. ej. `/home/<usuario>/forja-data`) para que los datos sobrevivan a cada redespliegue.
+4. Desplegar y activar SSL en el dominio.
+
 ## Copias de seguridad
 
 Todo vive en `DATA_DIR` (`forja.db` + `uploads/`). Copia esa carpeta para tener backup. Cada usuario puede además exportar sus datos en JSON desde Más.

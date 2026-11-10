@@ -71,10 +71,12 @@ export function createApp() {
   return app;
 }
 
-if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
-  const port = Number(process.env.PORT) || 3000;
-  createApp().listen(port, () => console.log(`Forja escuchando en http://localhost:${port}`));
+export function start(port = Number(process.env.PORT) || 3000) {
+  const server = createApp().listen(port, () => console.log(`Forja escuchando en http://localhost:${port}`));
   startScheduler();
   purgeExpiredSessions();
   setInterval(purgeExpiredSessions, 6 * 3600e3).unref();
+  return server;
 }
+
+if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) start();

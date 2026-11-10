@@ -9,10 +9,10 @@ FROM node:22-slim
 WORKDIR /app
 ENV NODE_ENV=production PORT=3000 DATA_DIR=/data
 COPY --from=build /app/node_modules ./node_modules
-COPY --from=build /app/package.json ./
+COPY --from=build /app/package.json /app/app.js ./
 COPY --from=build /app/server ./server
 COPY --from=build /app/shared ./shared
 COPY --from=build /app/client/dist ./client/dist
 VOLUME /data
 EXPOSE 3000
-CMD ["node", "--no-warnings", "server/index.js"]
+CMD ["node", "--no-warnings", "app.js"]
