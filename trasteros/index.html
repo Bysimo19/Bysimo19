@@ -1,0 +1,468 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Trastea · Trasteros en Barcelona desde 1 m² · Acceso 24/7</title>
+  <meta name="description" content="Trasteros en Barcelona desde 1 m². Reserva online en 2 minutos, acceso 24/7 con el móvil, sin permanencia y con seguro incluido. 50% los 2 primeros meses.">
+  <meta name="theme-color" content="#0E1013">
+  <meta property="og:title" content="Trastea · Trasteros en Barcelona">
+  <meta property="og:description" content="Calcula tu espacio en 3D y reserva online. Acceso 24/7, sin permanencia.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <script type="importmap">
+    { "imports": { "three": "./vendor/three.module.min.js" } }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SelfStorage",
+    "name": "Trastea Barcelona",
+    "address": { "@type": "PostalAddress", "streetAddress": "Carrer de l'Exemple 123", "addressLocality": "Barcelona", "postalCode": "08018", "addressCountry": "ES" },
+    "openingHours": "Mo-Su 00:00-23:59",
+    "priceRange": "39€ - 309€",
+    "telephone": "+34 600 000 000"
+  }
+  </script>
+</head>
+<body>
+
+  <!-- Barra superior de oferta -->
+  <div class="promo-bar" role="note">
+    <span class="pulse-dot" aria-hidden="true"></span>
+    <span><strong>-50% los 2 primeros meses</strong> en todos los tamaños · Oferta válida hasta el <span data-offer-end>30 nov</span></span>
+    <a href="#reservar" class="promo-bar__link">Bloquear precio →</a>
+  </div>
+
+  <header class="nav" data-nav>
+    <a href="#" class="brand" aria-label="Trastea, inicio">
+      <svg viewBox="0 0 32 32" width="28" height="28" aria-hidden="true"><path d="M16 2 29 9v14l-13 7-13-7V9z" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/><path d="M3 9l13 7 13-7M16 16v14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/><rect x="10" y="18" width="4" height="6" rx="1" fill="var(--accent)" transform="skewY(28) translate(0 -9)"/></svg>
+      <span>trastea</span>
+    </a>
+    <nav class="nav__links" aria-label="Principal">
+      <a href="#calculadora">Calculadora 3D</a>
+      <a href="#tamanos">Tamaños y precios</a>
+      <a href="#soluciones">Soluciones</a>
+      <a href="#seguridad">Seguridad</a>
+      <a href="#faq">Preguntas</a>
+    </nav>
+    <div class="nav__cta">
+      <a href="tel:+34600000000" class="nav__phone">
+        <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1z"/></svg>
+        600 000 000
+      </a>
+      <a href="#reservar" class="btn btn--accent btn--sm magnetic">Reservar</a>
+    </div>
+  </header>
+
+  <main>
+    <!-- HERO -->
+    <section class="hero" id="inicio">
+      <div class="hero__canvas" id="hero-3d" aria-hidden="true"></div>
+      <div class="hero__glow" aria-hidden="true"></div>
+      <div class="container hero__inner">
+        <div class="hero__copy">
+          <p class="eyebrow reveal"><span class="live-dot"></span> 37 trasteros libres hoy en Barcelona</p>
+          <h1 class="hero__title reveal">
+            <span class="line">Más espacio en casa.</span>
+            <span class="line"><em>Sin mudarte.</em></span>
+          </h1>
+          <p class="hero__lead reveal">Trasteros desde 1 m² a 10 minutos de tu casa. Reservas online en 2 minutos, entras 24/7 con el móvil y te vas cuando quieras. Sin fianza, sin permanencia.</p>
+
+          <form class="quick-quote reveal" data-quick-quote>
+            <label class="qq__field">
+              <span>¿Qué necesitas guardar?</span>
+              <select name="size" aria-label="Tamaño">
+                <option value="1">Unas cajas y maletas · 1 m²</option>
+                <option value="2">Un estudio · 2 m²</option>
+                <option value="3" selected>Una habitación · 3 m²</option>
+                <option value="5">Un piso pequeño · 5 m²</option>
+                <option value="8">Un piso de 1–2 habitaciones · 8 m²</option>
+                <option value="12">Un piso de 3 habitaciones · 12 m²</option>
+                <option value="18">Una casa o stock de empresa · 18 m²</option>
+              </select>
+            </label>
+            <div class="qq__price" aria-live="polite">
+              <span class="qq__old" data-qq-old>79 €</span>
+              <span class="qq__new"><b data-qq-new>39,50</b> €/mes</span>
+            </div>
+            <button class="btn btn--accent btn--lg magnetic" type="submit">Ver disponibilidad</button>
+          </form>
+
+          <ul class="hero__trust reveal" aria-label="Garantías">
+            <li><span class="stars" aria-hidden="true">★★★★★</span> <b>4,9</b> en Google · 1.200+ reseñas</li>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M9 16.2 4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4z"/></svg> Seguro hasta 3.000 € incluido</li>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M9 16.2 4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4z"/></svg> Cancela con 15 días de aviso</li>
+          </ul>
+        </div>
+      </div>
+      <a href="#ventajas" class="scroll-hint" aria-label="Bajar"><span></span></a>
+    </section>
+
+    <!-- TICKER -->
+    <div class="ticker" aria-hidden="true">
+      <div class="ticker__track">
+        <span>Acceso 24/7 con tu móvil</span><i>✦</i><span>Videovigilancia 4K</span><i>✦</i><span>Sin fianza</span><i>✦</i><span>Carros y montacargas gratis</span><i>✦</i><span>Parking de carga a pie de puerta</span><i>✦</i><span>Recogida a domicilio</span><i>✦</i><span>Climatizado 15–25 °C</span><i>✦</i>
+        <span>Acceso 24/7 con tu móvil</span><i>✦</i><span>Videovigilancia 4K</span><i>✦</i><span>Sin fianza</span><i>✦</i><span>Carros y montacargas gratis</span><i>✦</i><span>Parking de carga a pie de puerta</span><i>✦</i><span>Recogida a domicilio</span><i>✦</i><span>Climatizado 15–25 °C</span><i>✦</i>
+      </div>
+    </div>
+
+    <!-- KPIs -->
+    <section class="kpis container" id="ventajas">
+      <div class="kpi reveal"><b data-count="2">0</b><span>minutos para reservar online</span></div>
+      <div class="kpi reveal"><b data-count="24" data-suffix="/7">0</b><span>acceso todos los días del año</span></div>
+      <div class="kpi reveal"><b data-count="65" data-suffix="%">0</b><span>más barato que alquilar 1 m² de piso en BCN</span></div>
+      <div class="kpi reveal"><b data-count="0" data-suffix=" €">0</b><span>de fianza y de matrícula</span></div>
+    </section>
+
+    <!-- CALCULADORA 3D -->
+    <section class="calc" id="calculadora">
+      <div class="container">
+        <div class="section-head reveal">
+          <p class="eyebrow">Calculadora 3D</p>
+          <h2>Mira en 3D cómo quedan <em>tus cosas</em> antes de reservar.</h2>
+          <p class="section-head__lead">Añade lo que quieres guardar. Lo colocamos en un trastero a escala real y te decimos el tamaño justo. Sin pagar metros de más.</p>
+        </div>
+
+        <div class="calc__grid">
+          <aside class="calc__panel reveal">
+            <div class="calc__presets" role="group" aria-label="Ejemplos rápidos">
+              <button type="button" data-preset="estudiante">Estudiante</button>
+              <button type="button" data-preset="piso1">Piso 1 hab.</button>
+              <button type="button" data-preset="piso3">Piso 3 hab.</button>
+              <button type="button" data-preset="reforma">Reforma</button>
+              <button type="button" data-preset="ecommerce">E-commerce</button>
+            </div>
+            <ul class="calc__items" data-items></ul>
+            <button type="button" class="calc__reset" data-reset>Vaciar trastero</button>
+          </aside>
+
+          <div class="calc__stage reveal">
+            <div class="calc__canvas" id="calc-3d"></div>
+            <div class="calc__hud">
+              <div class="hud__sizes" role="radiogroup" aria-label="Tamaño del trastero" data-size-tabs></div>
+              <div class="hud__meter">
+                <div class="meter"><span data-meter></span></div>
+                <span data-fill-label>0% ocupado</span>
+              </div>
+            </div>
+            <div class="calc__result" aria-live="polite">
+              <div>
+                <p class="calc__result-k">Te recomendamos</p>
+                <p class="calc__result-v"><b data-rec-size>3 m²</b> <span data-rec-dims>2 × 1,5 m</span></p>
+                <p class="calc__result-p"><s data-rec-old>79 €</s> <b data-rec-new>39,50 €/mes</b> los 2 primeros meses</p>
+                <p class="calc__warn" data-warn hidden></p>
+              </div>
+              <a href="#reservar" class="btn btn--accent magnetic" data-rec-cta>Reservar este trastero</a>
+            </div>
+            <p class="calc__hint">Arrastra para girar</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAMAÑOS -->
+    <section class="sizes" id="tamanos">
+      <div class="container">
+        <div class="section-head section-head--row reveal">
+          <div>
+            <p class="eyebrow">Tamaños y precios</p>
+            <h2>Precio cerrado. <em>Sin sorpresas.</em></h2>
+          </div>
+          <div class="billing" role="radiogroup" aria-label="Duración">
+            <button type="button" class="is-active" data-billing="1">Mes a mes</button>
+            <button type="button" data-billing="6">6 meses <i>-10%</i></button>
+            <button type="button" data-billing="12">12 meses <i>-15%</i></button>
+          </div>
+        </div>
+        <div class="sizes__grid" data-sizes-grid></div>
+        <p class="sizes__note">IVA incluido. Seguro básico, candado inteligente y acceso por app incluidos en todos los tamaños. El descuento del 50% se aplica a los 2 primeros meses.</p>
+      </div>
+    </section>
+
+    <!-- SOLUCIONES -->
+    <section class="solutions" id="soluciones">
+      <div class="container">
+        <div class="section-head reveal">
+          <p class="eyebrow">Soluciones</p>
+          <h2>Un trastero para cada <em>momento</em>.</h2>
+        </div>
+        <div class="solutions__grid">
+          <article class="sol reveal tilt">
+            <figure class="sol__img" style="--fallback: linear-gradient(135deg,#3a2f25,#8a6a48)"><img loading="lazy" alt="Cajas de mudanza en un salón vacío" src="https://images.unsplash.com/photo-1600518464441-9154a4dea21b?auto=format&fit=crop&w=900&q=70"></figure>
+            <div class="sol__body">
+              <h3>Mudanza</h3>
+              <p>¿Entre pisos? Guarda todo el tiempo que necesites. Te llevamos los muebles con nuestra furgoneta.</p>
+              <ul><li>Recogida a domicilio desde 49 €</li><li>Cajas y precinto a precio de coste</li></ul>
+            </div>
+          </article>
+          <article class="sol reveal tilt">
+            <figure class="sol__img" style="--fallback: linear-gradient(135deg,#2d3530,#7e8c7a)"><img loading="lazy" alt="Vivienda en obras" src="https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&w=900&q=70"></figure>
+            <div class="sol__body">
+              <h3>Reforma</h3>
+              <p>Saca los muebles antes de que llegue el polvo. Pagas solo las semanas que dure la obra.</p>
+              <ul><li>Alquiler por semanas</li><li>Climatizado: tu madera no se estropea</li></ul>
+            </div>
+          </article>
+          <article class="sol reveal tilt">
+            <figure class="sol__img" style="--fallback: linear-gradient(135deg,#252a3a,#5d6b96)"><img loading="lazy" alt="Estudiantes en el campus" src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=900&q=70"></figure>
+            <div class="sol__body">
+              <h3>Estudiantes</h3>
+              <p>Deja tus cosas en verano y no pagues piso. Más barato que un billete de vuelta con maleta extra.</p>
+              <ul><li>-20% con carné universitario</li><li>Desde 1 m²</li></ul>
+            </div>
+          </article>
+          <article class="sol reveal tilt">
+            <figure class="sol__img" style="--fallback: linear-gradient(135deg,#3a2525,#a05a42)"><img loading="lazy" alt="Almacén con estanterías y cajas" src="https://images.unsplash.com/photo-1553413077-190dd305871c?auto=format&fit=crop&w=900&q=70"></figure>
+            <div class="sol__body">
+              <h3>E-commerce y empresas</h3>
+              <p>Tu mini almacén en la ciudad. Recibimos tus paquetes y entras a preparar pedidos a cualquier hora.</p>
+              <ul><li>Recepción de mercancía</li><li>Factura con IVA deducible</li></ul>
+            </div>
+          </article>
+          <article class="sol reveal tilt">
+            <figure class="sol__img" style="--fallback: linear-gradient(135deg,#1f3236,#4f8a8f)"><img loading="lazy" alt="Bicicleta de carretera" src="https://images.unsplash.com/photo-1517649763962-0c623066013b?auto=format&fit=crop&w=900&q=70"></figure>
+            <div class="sol__body">
+              <h3>Deporte y hobbies</h3>
+              <p>Bicis, esquís, tabla de surf, material de camping. Libera el balcón y el pasillo.</p>
+              <ul><li>Ganchos para bici gratis</li><li>Acceso 24/7 para salir temprano</li></ul>
+            </div>
+          </article>
+          <article class="sol reveal tilt">
+            <figure class="sol__img" style="--fallback: linear-gradient(135deg,#2e2a22,#8f8160)"><img loading="lazy" alt="Oficina con archivo" src="https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=900&q=70"></figure>
+            <div class="sol__body">
+              <h3>Autónomos y archivo</h3>
+              <p>Documentación, herramientas y muestras fuera de la oficina. Guarda el archivo legal 5 años con tranquilidad.</p>
+              <ul><li>Estanterías incluidas desde 3 m²</li><li>Contrato a nombre de empresa</li></ul>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- CÓMO FUNCIONA -->
+    <section class="steps" id="como-funciona">
+      <div class="container">
+        <div class="section-head reveal">
+          <p class="eyebrow">Cómo funciona</p>
+          <h2>De la web a tu trastero <em>en el mismo día</em>.</h2>
+        </div>
+        <div class="steps__line" aria-hidden="true"><span></span></div>
+        <ol class="steps__list">
+          <li class="step reveal">
+            <span class="step__n">01</span>
+            <h3>Elige y reserva</h3>
+            <p>Usa la calculadora, elige tamaño y paga el primer mes. 2 minutos. Sin papeles ni visitas.</p>
+          </li>
+          <li class="step reveal">
+            <span class="step__n">02</span>
+            <h3>Recibe tu acceso</h3>
+            <p>Te llega un código al móvil. Abre la puerta del edificio y tu candado inteligente con la app.</p>
+          </li>
+          <li class="step reveal">
+            <span class="step__n">03</span>
+            <h3>Entra cuando quieras</h3>
+            <p>Aparca en la zona de carga, coge un carro y sube por el montacargas. 24 horas, 365 días.</p>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- SEGURIDAD -->
+    <section class="security" id="seguridad">
+      <div class="container security__grid">
+        <div class="security__media reveal">
+          <figure style="--fallback: linear-gradient(160deg,#1b1f24,#3b4450)"><img loading="lazy" alt="Pasillo de trasteros con puertas metálicas" src="https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=1200&q=70"></figure>
+          <div class="security__badge">
+            <b>0</b>
+            <span>incidencias de robo<br>desde la apertura</span>
+          </div>
+        </div>
+        <div class="security__copy">
+          <p class="eyebrow reveal">Seguridad</p>
+          <h2 class="reveal">Más protegido que <em>tu propia casa</em>.</h2>
+          <ul class="features">
+            <li class="reveal"><span class="ic">◉</span><div><b>Videovigilancia 4K 24 h</b><p>Cámaras en pasillos, accesos y zona de carga, conectadas a central receptora de alarmas.</p></div></li>
+            <li class="reveal"><span class="ic">⌁</span><div><b>Acceso individual por app</b><p>Cada entrada queda registrada. Solo tú y quien autorices podéis abrir.</p></div></li>
+            <li class="reveal"><span class="ic">✓</span><div><b>Seguro incluido</b><p>Cobertura de 3.000 € incluida. Amplíala hasta 20.000 € por 4 €/mes.</p></div></li>
+            <li class="reveal"><span class="ic">❄</span><div><b>Ambiente controlado</b><p>Temperatura entre 15 y 25 °C y control de humedad. Sin goteras, sin plagas.</p></div></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- COMPARATIVA -->
+    <section class="compare">
+      <div class="container">
+        <div class="section-head reveal">
+          <p class="eyebrow">Haz números</p>
+          <h2>Lo que cuesta guardar <em>5 m²</em> al mes.</h2>
+        </div>
+        <div class="compare__bars reveal" data-bars>
+          <div class="bar"><span class="bar__label">Alquilar un piso 5 m² más grande en BCN</span><span class="bar__track"><i style="--w:100%"></i></span><b>~ 120 €</b></div>
+          <div class="bar"><span class="bar__label">Trastero tradicional con permanencia 12 meses</span><span class="bar__track"><i style="--w:88%"></i></span><b>~ 135 €</b></div>
+          <div class="bar bar--us"><span class="bar__label">Trastea · 5 m², 2 primeros meses</span><span class="bar__track"><i style="--w:43%"></i></span><b>57,50 €</b></div>
+        </div>
+        <div class="compare__table reveal">
+          <table>
+            <thead><tr><th></th><th>Trastea</th><th>Trastero habitual</th></tr></thead>
+            <tbody>
+              <tr><td>Reserva 100% online</td><td class="y">Sí, 2 min</td><td>Visita obligatoria</td></tr>
+              <tr><td>Fianza</td><td class="y">0 €</td><td>1–2 meses</td></tr>
+              <tr><td>Permanencia</td><td class="y">No</td><td>3–12 meses</td></tr>
+              <tr><td>Horario</td><td class="y">24/7</td><td>Horario comercial</td></tr>
+              <tr><td>Cambio de tamaño</td><td class="y">Gratis</td><td>Nuevo contrato</td></tr>
+              <tr><td>Seguro</td><td class="y">Incluido</td><td>Aparte</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- RESEÑAS -->
+    <section class="reviews" id="opiniones">
+      <div class="container">
+        <div class="section-head section-head--row reveal">
+          <div>
+            <p class="eyebrow">Opiniones</p>
+            <h2>4,9 de 5 <em>en Google</em>.</h2>
+          </div>
+          <a class="btn btn--ghost" href="#" rel="noopener">Ver todas las reseñas</a>
+        </div>
+        <div class="reviews__rail">
+          <figure class="review reveal"><span class="stars">★★★★★</span><blockquote>“Reservé el domingo por la noche y el lunes a las 8 ya estaba metiendo la moto. El montacargas es enorme.”</blockquote><figcaption><b>Marc R.</b> · Moto y material de escalada</figcaption></figure>
+          <figure class="review reveal"><span class="stars">★★★★★</span><blockquote>“Tuvimos el piso en obras 4 meses. Pagamos solo esos meses y nos recogieron los muebles en casa.”</blockquote><figcaption><b>Laura y Jordi</b> · Reforma integral</figcaption></figure>
+          <figure class="review reveal"><span class="stars">★★★★★</span><blockquote>“Tengo el stock de mi tienda online aquí. Me reciben los pedidos de proveedores y preparo envíos a las 7 de la mañana.”</blockquote><figcaption><b>Núria P.</b> · Tienda de cosmética</figcaption></figure>
+          <figure class="review reveal"><span class="stars">★★★★★</span><blockquote>“La calculadora 3D me ahorró pagar un trastero el doble de grande. Clavó el tamaño.”</blockquote><figcaption><b>Andrés G.</b> · Estudiante de máster</figcaption></figure>
+        </div>
+      </div>
+    </section>
+
+    <!-- RESERVA / LEAD -->
+    <section class="booking" id="reservar">
+      <div class="container booking__grid">
+        <div class="booking__copy">
+          <p class="eyebrow reveal">Reserva sin compromiso</p>
+          <h2 class="reveal">Bloquea tu precio <em>hoy</em>. Paga cuando entres.</h2>
+          <p class="reveal">Déjanos tus datos y te guardamos el trastero 7 días con el 50% de descuento. Un asesor te llama en menos de 15 minutos en horario laboral para resolver dudas.</p>
+          <ul class="booking__perks reveal">
+            <li>Reserva gratuita, cancelable</li>
+            <li>Visita la instalación si lo prefieres</li>
+            <li>Cambio de tamaño gratis el primer mes</li>
+          </ul>
+          <div class="countdown reveal" aria-label="Tiempo restante de la oferta">
+            <span>La oferta termina en</span>
+            <div class="countdown__cells" data-countdown>
+              <div><b>00</b><i>días</i></div><div><b>00</b><i>horas</i></div><div><b>00</b><i>min</i></div><div><b>00</b><i>seg</i></div>
+            </div>
+          </div>
+        </div>
+
+        <form class="lead reveal" data-lead novalidate>
+          <div class="lead__steps" aria-hidden="true"><span class="is-on"></span><span></span></div>
+          <fieldset data-step="1">
+            <legend>¿Qué tamaño necesitas?</legend>
+            <div class="lead__sizes" data-lead-sizes></div>
+            <label class="field"><span>¿Cuándo lo necesitas?</span>
+              <select name="cuando">
+                <option>Esta semana</option><option>En 2 semanas</option><option>Este mes</option><option>Más adelante</option>
+              </select>
+            </label>
+            <button type="button" class="btn btn--accent btn--block" data-next>Continuar</button>
+          </fieldset>
+          <fieldset data-step="2" hidden>
+            <legend>¿Dónde te enviamos la reserva?</legend>
+            <label class="field"><span>Nombre</span><input name="nombre" autocomplete="given-name" required></label>
+            <label class="field"><span>Teléfono</span><input name="telefono" type="tel" autocomplete="tel" inputmode="tel" required pattern="[0-9 +]{9,15}"></label>
+            <label class="field"><span>Email</span><input name="email" type="email" autocomplete="email" required></label>
+            <label class="check"><input type="checkbox" name="privacidad" required> <span>Acepto la <a href="#">política de privacidad</a>.</span></label>
+            <button type="submit" class="btn btn--accent btn--block">Reservar con -50%</button>
+            <button type="button" class="lead__back" data-back>← Cambiar tamaño</button>
+          </fieldset>
+          <div class="lead__ok" data-ok hidden>
+            <div class="lead__ok-ic">✓</div>
+            <h3>¡Trastero reservado!</h3>
+            <p>Te hemos guardado un trastero de <b data-ok-size></b> durante 7 días. Te llamamos en breve.</p>
+            <a class="btn btn--ghost btn--block" data-ok-wa target="_blank" rel="noopener">Hablar ahora por WhatsApp</a>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="faq" id="faq">
+      <div class="container faq__grid">
+        <div class="section-head reveal">
+          <p class="eyebrow">Preguntas frecuentes</p>
+          <h2>Todo lo que te <em>preguntas</em>.</h2>
+          <p class="section-head__lead">¿No está tu duda? Escríbenos por <a href="https://wa.me/34600000000" target="_blank" rel="noopener">WhatsApp</a> y te contestamos en minutos.</p>
+        </div>
+        <div class="faq__list">
+          <details class="reveal" open><summary>¿Hay permanencia o fianza?</summary><p>No. Pagas mes a mes y te vas avisando con 15 días. No pedimos fianza ni matrícula.</p></details>
+          <details class="reveal"><summary>¿Puedo entrar a cualquier hora?</summary><p>Sí, 24 horas al día, 365 días al año, con la app o con tu código personal.</p></details>
+          <details class="reveal"><summary>¿Qué no puedo guardar?</summary><p>Productos inflamables, explosivos, perecederos, animales, armas y cualquier material ilegal. Todo lo demás, sí.</p></details>
+          <details class="reveal"><summary>¿Y si me equivoco de tamaño?</summary><p>Te cambiamos a otro trastero gratis durante el primer mes. Y si es más pequeño, te devolvemos la diferencia.</p></details>
+          <details class="reveal"><summary>¿Cómo funciona el seguro?</summary><p>Incluimos una cobertura de 3.000 € contra robo, incendio y agua. Puedes ampliarla hasta 20.000 € desde 4 €/mes.</p></details>
+          <details class="reveal"><summary>¿Hay parking para descargar?</summary><p>Sí. Zona de carga gratuita a pie de puerta, carros, transpaletas y montacargas para furgonetas grandes.</p></details>
+          <details class="reveal"><summary>¿Puedo facturar a mi empresa?</summary><p>Sí. Emitimos factura con IVA a nombre de tu empresa y podemos recibir mercancía en tu nombre.</p></details>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA FINAL -->
+    <section class="final">
+      <div class="final__canvas" id="final-3d" aria-hidden="true"></div>
+      <div class="container final__inner">
+        <h2 class="reveal">Recupera tu casa <em>este fin de semana</em>.</h2>
+        <div class="final__ctas reveal">
+          <a href="#reservar" class="btn btn--accent btn--lg magnetic">Reservar con -50%</a>
+          <a href="#calculadora" class="btn btn--ghost btn--lg">Calcular mi tamaño</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer__grid">
+      <div>
+        <a href="#" class="brand brand--footer"><span>trastea</span></a>
+        <p>Trasteros y guardamuebles en Barcelona.<br>Carrer de l'Exemple 123, 08018 Barcelona</p>
+      </div>
+      <div><b>Trasteros</b><a href="#tamanos">Tamaños y precios</a><a href="#calculadora">Calculadora 3D</a><a href="#soluciones">Para empresas</a></div>
+      <div><b>Ayuda</b><a href="#faq">Preguntas</a><a href="tel:+34600000000">600 000 000</a><a href="https://wa.me/34600000000">WhatsApp</a></div>
+      <div><b>Legal</b><a href="#">Aviso legal</a><a href="#">Privacidad</a><a href="#">Cookies</a></div>
+    </div>
+    <p class="container footer__legal">© <span data-year>2026</span> Trastea. Precios con IVA incluido.</p>
+  </footer>
+
+  <!-- Barra fija móvil -->
+  <div class="mobile-bar">
+    <a href="https://wa.me/34600000000" class="btn btn--ghost" target="_blank" rel="noopener">WhatsApp</a>
+    <a href="#reservar" class="btn btn--accent">Reservar -50%</a>
+  </div>
+
+  <!-- WhatsApp flotante -->
+  <a class="wa-float" href="https://wa.me/34600000000?text=Hola%2C%20quiero%20informaci%C3%B3n%20sobre%20un%20trastero" target="_blank" rel="noopener" aria-label="Escríbenos por WhatsApp">
+    <svg viewBox="0 0 32 32" width="28" height="28" aria-hidden="true"><path fill="currentColor" d="M16 3a13 13 0 0 0-11.2 19.6L3 29l6.6-1.7A13 13 0 1 0 16 3zm0 23.7a10.7 10.7 0 0 1-5.5-1.5l-.4-.2-3.9 1 1-3.8-.2-.4A10.7 10.7 0 1 1 16 26.7zm5.9-8c-.3-.2-1.9-1-2.2-1s-.5-.2-.7.2l-1 1.2c-.2.2-.4.2-.7 0a8.8 8.8 0 0 1-4.4-3.8c-.3-.6.3-.5.9-1.7.1-.2 0-.4 0-.5l-1-2.4c-.3-.6-.5-.5-.7-.5h-.6a1.2 1.2 0 0 0-.9.4 3.7 3.7 0 0 0-1.1 2.7 6.4 6.4 0 0 0 1.3 3.4 14.7 14.7 0 0 0 5.7 5c2.1.9 2.9 1 4 .8a3.4 3.4 0 0 0 2.2-1.6 2.8 2.8 0 0 0 .2-1.6c0-.2-.3-.3-.6-.4z"/></svg>
+  </a>
+
+  <!-- Pop-up de salida -->
+  <div class="exit" data-exit hidden>
+    <div class="exit__card" role="dialog" aria-modal="true" aria-labelledby="exit-title">
+      <button class="exit__close" type="button" data-exit-close aria-label="Cerrar">×</button>
+      <p class="eyebrow">Antes de irte</p>
+      <h3 id="exit-title">Te guardamos el <em>-50%</em> 7 días.</h3>
+      <p>Déjanos tu móvil y te enviamos el código por WhatsApp. Sin spam.</p>
+      <form data-exit-form>
+        <input type="tel" name="telefono" placeholder="Tu móvil" inputmode="tel" required aria-label="Móvil">
+        <button class="btn btn--accent" type="submit">Enviarme el código</button>
+      </form>
+      <p class="exit__ok" data-exit-ok hidden>Hecho. Tu código es <b>TRASTEA50</b>.</p>
+    </div>
+  </div>
+
+  <script type="module" src="main.js"></script>
+</body>
+</html>
