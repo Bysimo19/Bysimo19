@@ -27,7 +27,7 @@ Las tallas que se ven en la tarjeta al pasar el ratón salen de la opción de va
 
 | Página | JS que carga | 3D |
 |---|---|---|
-| Portada | `theme.js` (~7 KB gzip) + `hero-3d.js` (~4 KB gzip) | Sí, WebGL puro |
+| Portada | `theme.js` (~6 KB gzip) + `hero-3d.js` (~5 KB gzip) | Sí, WebGL puro |
 | Categoría, producto, carrito | Solo `theme.js` | No |
 
 - Hero 3D sin Three.js. Se pausa fuera de pantalla y con la pestaña oculta. DPR limitado a 1,5 en móvil.
