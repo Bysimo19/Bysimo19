@@ -1,0 +1,97 @@
+{%- liquid
+  assign overlay = false
+  if template.name == 'index' and settings.header_overlay_home
+    assign overlay = true
+  endif
+  assign menu = linklists[section.settings.menu]
+-%}
+{%- if section.settings.announcement != blank -%}
+  <div class="announce" role="region" aria-label="Avisos">
+    <div class="announce__track">
+      {%- assign msgs = section.settings.announcement | split: '|' -%}
+      {%- for i in (1..4) -%}{%- for m in msgs -%}<span>{{ m | strip }}</span>{%- endfor -%}{%- endfor -%}
+    </div>
+  </div>
+{%- endif -%}
+
+<header class="header{% if overlay %} header--overlay{% endif %}"{% if overlay and section.settings.announcement != blank %} style="top:34px"{% endif %}>
+  <div class="wrap header__inner">
+    <div style="display:flex;align-items:center;gap:4px">
+      <button class="icon-btn menu-toggle" data-open="MenuDrawer" aria-label="Menú">{% render 'icon', name: 'menu' %}</button>
+      <ul class="header__nav" role="list">
+        {%- for link in menu.links -%}
+          <li>
+            <a class="link-u{% if link.active or link.child_active %} is-active{% endif %}" href="{{ link.url }}">{{ link.title }}</a>
+            {%- if link.links.size > 0 -%}
+              <div class="dropdown">
+                {%- for child in link.links -%}<a href="{{ child.url }}">{{ child.title }}</a>{%- endfor -%}
+              </div>
+            {%- endif -%}
+          </li>
+        {%- endfor -%}
+      </ul>
+    </div>
+
+    <a class="header__logo" href="{{ routes.root_url }}" aria-label="{{ shop.name }}">
+      {%- if section.settings.logo != blank -%}
+        {%- assign logo_style = 'max-width:' | append: section.settings.logo_width | append: 'px' -%}
+        {{ section.settings.logo | image_url: width: 400 | image_tag: loading: 'eager', widths: '200,300,400', sizes: '200px', alt: shop.name, style: logo_style }}
+      {%- else -%}
+        {{ shop.name }}
+      {%- endif -%}
+    </a>
+
+    <div class="header__icons">
+      <a class="icon-btn" href="{{ routes.search_url }}" data-open="SearchOverlay" aria-label="Buscar">{% render 'icon', name: 'search' %}</a>
+      {%- if shop.customer_accounts_enabled -%}
+        <a class="icon-btn" href="{{ routes.account_url }}" aria-label="Cuenta">{% render 'icon', name: 'user' %}</a>
+      {%- endif -%}
+      <a class="icon-btn" href="{{ routes.cart_url }}" data-open="CartDrawer" aria-label="Carrito">
+        {% render 'icon', name: 'cart' %}
+        <span class="cart-count{% if cart.item_count > 0 %} has-items{% endif %}" data-cart-count>{{ cart.item_count }}</span>
+      </a>
+    </div>
+  </div>
+</header>
+
+<div class="drawer drawer--left" id="MenuDrawer" aria-hidden="true" inert>
+  <div class="drawer__scrim" data-close></div>
+  <nav class="drawer__panel" aria-label="Menú principal">
+    <div class="drawer__head">
+      <span class="header__logo" style="justify-self:start">{{ shop.name }}</span>
+      <button class="icon-btn" data-close aria-label="Cerrar">{% render 'icon', name: 'close' %}</button>
+    </div>
+    <div class="drawer__body mnav">
+      {%- for link in menu.links -%}
+        {%- if link.links.size > 0 -%}
+          <details>
+            <summary>{{ link.title }} <span>+</span></summary>
+            <div class="sub">
+              <a href="{{ link.url }}">Ver todo</a>
+              {%- for child in link.links -%}<a href="{{ child.url }}">{{ child.title }}</a>{%- endfor -%}
+            </div>
+          </details>
+        {%- else -%}
+          <a href="{{ link.url }}">{{ link.title }} <span>→</span></a>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+    <div class="drawer__foot" style="display:flex;justify-content:space-between;align-items:center">
+      {%- if shop.customer_accounts_enabled -%}<a class="link-u" href="{{ routes.account_url }}">Mi cuenta</a>{%- endif -%}
+      {% render 'social' %}
+    </div>
+  </nav>
+</div>
+
+{% schema %}
+{
+  "name": "Cabecera",
+  "class": "header-section",
+  "settings": [
+    { "type": "image_picker", "id": "logo", "label": "Logo (opcional, si no se usa el nombre de la tienda)" },
+    { "type": "range", "id": "logo_width", "label": "Ancho del logo", "min": 60, "max": 240, "step": 10, "unit": "px", "default": 130 },
+    { "type": "link_list", "id": "menu", "label": "Menú", "default": "main-menu" },
+    { "type": "text", "id": "announcement", "label": "Barra de avisos", "info": "Separa mensajes con |", "default": "Envío gratis desde 100 € | 100% auténtico, verificado a mano | Devoluciones en 14 días" }
+  ]
+}
+{% endschema %}

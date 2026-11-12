@@ -1,0 +1,16 @@
+<div class="wrap coll-hero"><h1 class="h1">Categorías</h1></div>
+<div class="wrap coll-grid">
+  <div class="cats">
+    {%- for col in collections -%}
+      {%- if col.handle == 'all' or col.handle == 'frontpage' -%}{%- continue -%}{%- endif -%}
+      {%- assign img = col.featured_image | default: col.products.first.featured_image -%}
+      <a class="cat reveal" href="{{ col.url }}">
+        {%- if img -%}{{ img | image_url: width: 1200 | image_tag: loading: 'lazy', widths: '400,800,1200', sizes: '(min-width: 860px) 50vw, 100vw' }}{%- endif -%}
+        <div class="cat__body"><div><div class="cat__count">{{ col.products_count }} productos</div><div class="h2">{{ col.title }}</div></div><span class="cat__arrow">{% render 'icon', name: 'arrow' %}</span></div>
+      </a>
+    {%- endfor -%}
+  </div>
+</div>
+{% schema %}
+{ "name": "Lista de colecciones" }
+{% endschema %}

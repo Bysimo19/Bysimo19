@@ -1,0 +1,13 @@
+{
+  "general": {
+    "search": "Buscar",
+    "cart": "Carrito",
+    "menu": "Menú",
+    "close": "Cerrar"
+  },
+  "products": {
+    "add_to_cart": "Añadir al carrito",
+    "sold_out": "Agotado",
+    "unavailable": "No disponible"
+  }
+}

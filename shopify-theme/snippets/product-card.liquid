@@ -1,0 +1,71 @@
+{%- comment -%}
+  Tarjeta de producto. Uso: {% render 'product-card', product: product, index: forloop.index0, sizes: '(min-width: 1100px) 25vw, 50vw' %}
+{%- endcomment -%}
+{%- liquid
+  assign img = product.featured_media
+  assign img2 = product.media[1]
+  assign sizes = sizes | default: '(min-width: 1100px) 25vw, (min-width: 860px) 33vw, 50vw'
+  assign loading = 'lazy'
+  if index < 4 and eager
+    assign loading = 'eager'
+  endif
+  assign size_option = nil
+  for opt in product.options_with_values
+    assign n = opt.name | downcase
+    if n contains 'talla' or n contains 'size' or n contains 'eu'
+      assign size_option = opt
+      break
+    endif
+  endfor
+-%}
+<article class="card reveal" style="--i: {{ index | modulo: 8 }}">
+  <a class="card__media" href="{{ product.url }}" aria-label="{{ product.title | escape }}">
+    {%- if img -%}
+      {{ img | image_url: width: 900 | image_tag: loading: loading, widths: '300,450,600,750,900', sizes: sizes, class: 'card__img', alt: product.title }}
+      {%- if img2 and settings.card_hover_image -%}
+        {{ img2 | image_url: width: 900 | image_tag: loading: 'lazy', widths: '300,450,600,750,900', sizes: sizes, class: 'card__img2', alt: '' }}
+      {%- endif -%}
+    {%- else -%}
+      {{ 'product-apparel-1' | placeholder_svg_tag: 'card__img' }}
+    {%- endif -%}
+
+    <div class="card__badges">
+      {%- if product.available == false -%}
+        <span class="badge badge--soldout">Agotado</span>
+      {%- elsif product.compare_at_price > product.price -%}
+        {%- assign off = product.compare_at_price | minus: product.price | times: 100 | divided_by: product.compare_at_price -%}
+        <span class="badge badge--sale">-{{ off }}%</span>
+      {%- endif -%}
+      {%- if product.tags contains 'nuevo' or product.tags contains 'new' -%}
+        <span class="badge badge--new">Nuevo</span>
+      {%- endif -%}
+      {%- if product.tags contains 'top' -%}
+        <span class="badge">Top ventas</span>
+      {%- endif -%}
+    </div>
+
+    {%- if size_option and product.available and settings.card_show_sizes -%}
+      <div class="card__quick" aria-hidden="true">
+        {%- for v in size_option.values limit: 12 -%}
+          {%- liquid
+            assign avail = false
+            for variant in product.variants
+              if variant.options contains v and variant.available
+                assign avail = true
+                break
+              endif
+            endfor
+          -%}
+          <span{% unless avail %} class="na"{% endunless %}>{{ v }}</span>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+  </a>
+  <div class="card__info">
+    <div>
+      {%- if settings.card_show_vendor -%}<div class="card__vendor">{{ product.vendor }}</div>{%- endif -%}
+      <a class="card__title" href="{{ product.url }}">{{ product.title }}</a>
+    </div>
+    {% render 'price', product: product %}
+  </div>
+</article>

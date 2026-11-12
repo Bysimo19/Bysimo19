@@ -1,0 +1,18 @@
+<div class="wrap coll-hero"><h1 class="h1">{{ blog.title }}</h1></div>
+<div class="wrap coll-grid">
+  {%- paginate blog.articles by 12 -%}
+  <div class="grid" style="--cols:3">
+    {%- for article in blog.articles -%}
+      <a class="card reveal" href="{{ article.url }}">
+        <div class="card__media">{%- if article.image -%}{{ article.image | image_url: width: 900 | image_tag: loading: 'lazy', widths: '400,600,900', sizes: '33vw' }}{%- endif -%}</div>
+        <span class="card__vendor">{{ article.published_at | date: '%d/%m/%Y' }}</span>
+        <span class="h3">{{ article.title }}</span>
+      </a>
+    {%- endfor -%}
+  </div>
+  {%- if paginate.pages > 1 -%}<nav class="pagination">{{ paginate | default_pagination: previous: '←', next: '→' }}</nav>{%- endif -%}
+  {%- endpaginate -%}
+</div>
+{% schema %}
+{ "name": "Blog" }
+{% endschema %}

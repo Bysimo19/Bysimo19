@@ -1,0 +1,37 @@
+<section class="section--tight">
+  <div class="wrap">
+    <div class="trust" data-stagger>
+      {%- for block in section.blocks -%}
+        <div class="trust__item reveal" {{ block.shopify_attributes }}>
+          {% render 'icon', name: block.settings.icon %}
+          <h3>{{ block.settings.title }}</h3>
+          <p>{{ block.settings.text }}</p>
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Garantías",
+  "max_blocks": 4,
+  "blocks": [
+    {
+      "type": "item",
+      "name": "Garantía",
+      "settings": [
+        { "type": "select", "id": "icon", "label": "Icono", "options": [ { "value": "truck", "label": "Envío" }, { "value": "shield", "label": "Autenticidad" }, { "value": "return", "label": "Devolución" }, { "value": "lock", "label": "Pago seguro" }, { "value": "chat", "label": "Atención" }, { "value": "check", "label": "Check" } ], "default": "truck" },
+        { "type": "text", "id": "title", "label": "Título", "default": "Envío 24/48h" },
+        { "type": "text", "id": "text", "label": "Texto", "default": "Gratis desde 100 € en península." }
+      ]
+    }
+  ],
+  "presets": [{ "name": "Garantías", "blocks": [
+    { "type": "item", "settings": { "icon": "truck", "title": "Envío 24/48h", "text": "Gratis desde 100 € en península." } },
+    { "type": "item", "settings": { "icon": "shield", "title": "100% auténtico", "text": "Verificación manual de cada par." } },
+    { "type": "item", "settings": { "icon": "return", "title": "Devolución 14 días", "text": "Sin preguntas, etiqueta incluida." } },
+    { "type": "item", "settings": { "icon": "lock", "title": "Pago seguro", "text": "Tarjeta, Bizum, PayPal y a plazos." } }
+  ] }]
+}
+{% endschema %}

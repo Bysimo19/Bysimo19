@@ -1,0 +1,16 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-product",
+      "blocks": {
+        "ship": { "type": "tab", "settings": { "title": "Envíos y devoluciones", "content": "<p>Envío en 24/48 h laborables a península. Baleares, Canarias y resto de Europa: 3-5 días. Devolución gratuita durante 14 días si el producto está sin usar y con su caja.</p>" } },
+        "auth": { "type": "tab", "settings": { "title": "Autenticidad", "content": "<p>Todos los productos son 100% originales. Cada par pasa una revisión manual antes del envío.</p>" } },
+        "size": { "type": "tab", "settings": { "title": "Guía de tallas", "content": "<p>Las tallas son EU. Si dudas entre dos, elige la mayor en Nike/Jordan y tu talla habitual en Adidas y New Balance.</p>" } }
+      },
+      "block_order": ["ship", "auth", "size"],
+      "settings": {}
+    },
+    "recs": { "type": "product-recommendations", "settings": {} }
+  },
+  "order": ["main", "recs"]
+}

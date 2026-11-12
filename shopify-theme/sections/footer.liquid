@@ -1,0 +1,57 @@
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer__top">
+      <div style="display:grid;gap:18px;align-content:start;max-width:360px">
+        <h4>{{ section.settings.about_title }}</h4>
+        <div class="rte" style="font-size:14px">{{ section.settings.about_text }}</div>
+        {% render 'social' %}
+      </div>
+      {%- for block in section.blocks -%}
+        <div {{ block.shopify_attributes }}>
+          <h4>{{ block.settings.title }}</h4>
+          <ul>
+            {%- for link in linklists[block.settings.menu].links -%}
+              <li><a class="link-u" href="{{ link.url }}">{{ link.title }}</a></li>
+            {%- endfor -%}
+          </ul>
+        </div>
+      {%- endfor -%}
+    </div>
+
+    <div class="footer__brand" aria-hidden="true">{{ section.settings.big_text | default: shop.name }}</div>
+
+    <div class="footer__bottom">
+      <span>© {{ 'now' | date: '%Y' }} {{ shop.name }}. {{ powered_by_link }}</span>
+      {%- if section.settings.show_payments -%}
+        <ul class="payments" role="list">
+          {%- for type in shop.enabled_payment_types -%}<li>{{ type | payment_type_svg_tag }}</li>{%- endfor -%}
+        </ul>
+      {%- endif -%}
+      <span>{{ localization.country.name }} ({{ localization.country.currency.iso_code }} {{ localization.country.currency.symbol }})</span>
+    </div>
+  </div>
+</footer>
+
+{% schema %}
+{
+  "name": "Pie de página",
+  "max_blocks": 4,
+  "settings": [
+    { "type": "text", "id": "about_title", "label": "Título", "default": "Sobre nosotros" },
+    { "type": "richtext", "id": "about_text", "label": "Texto", "default": "<p>Sneakers y streetwear 100% originales. Cada par se revisa a mano antes de salir del almacén.</p>" },
+    { "type": "text", "id": "big_text", "label": "Texto gigante", "info": "Vacío = nombre de la tienda" },
+    { "type": "checkbox", "id": "show_payments", "label": "Mostrar métodos de pago", "default": true }
+  ],
+  "blocks": [
+    {
+      "type": "menu",
+      "name": "Columna de enlaces",
+      "settings": [
+        { "type": "text", "id": "title", "label": "Título", "default": "Tienda" },
+        { "type": "link_list", "id": "menu", "label": "Menú", "default": "footer" }
+      ]
+    }
+  ],
+  "default": { "blocks": [ { "type": "menu", "settings": { "title": "Tienda", "menu": "main-menu" } }, { "type": "menu", "settings": { "title": "Ayuda", "menu": "footer" } } ] }
+}
+{% endschema %}

@@ -1,0 +1,29 @@
+<section class="section">
+  <div class="wrap">
+    <div class="news reveal">
+      <h2 class="h1">{{ section.settings.title }}</h2>
+      <div>
+        <p style="margin-bottom:18px;opacity:.75">{{ section.settings.text }}</p>
+        {%- form 'customer', class: 'news__form' -%}
+          <input type="hidden" name="contact[tags]" value="newsletter">
+          <label class="visually-hidden" for="NewsEmail-{{ section.id }}">Email</label>
+          <input id="NewsEmail-{{ section.id }}" type="email" name="contact[email]" placeholder="tu@email.com" required autocomplete="email">
+          <button class="btn btn--accent" type="submit">Unirme</button>
+        {%- endform -%}
+        <p class="news__ok" style="margin-top:12px" data-news-ok hidden>Dentro. Te avisamos del próximo drop.</p>
+        <p class="news__note">Sin spam. Puedes darte de baja cuando quieras.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Newsletter",
+  "settings": [
+    { "type": "text", "id": "title", "label": "Título", "default": "Entérate antes que nadie" },
+    { "type": "text", "id": "text", "label": "Texto", "default": "Avisos de drops y restocks 30 minutos antes de que salgan en la web." }
+  ],
+  "presets": [{ "name": "Newsletter" }]
+}
+{% endschema %}

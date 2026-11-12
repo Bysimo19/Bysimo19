@@ -1,0 +1,54 @@
+<section class="section">
+  <div class="wrap">
+    <div class="section__head">
+      <h2 class="h1"><span class="split-line"><span>{{ section.settings.title }}</span></span></h2>
+      {%- if section.settings.text != blank -%}<p class="muted">{{ section.settings.text }}</p>{%- endif -%}
+    </div>
+    <div class="cats" data-stagger>
+      {%- for block in section.blocks -%}
+        {%- liquid
+          assign col = block.settings.collection
+          assign img = block.settings.image | default: col.featured_image | default: col.products.first.featured_image
+          assign label = block.settings.label | default: col.title
+        -%}
+        <a class="cat reveal" href="{{ col.url | default: '#' }}" {{ block.shopify_attributes }}>
+          {%- if img -%}
+            {{ img | image_url: width: 1400 | image_tag: loading: 'lazy', widths: '400,700,1000,1400', sizes: '(min-width: 860px) 50vw, 100vw', alt: label }}
+          {%- else -%}
+            {{ 'collection-apparel-1' | placeholder_svg_tag }}
+          {%- endif -%}
+          <div class="cat__body">
+            <div>
+              <div class="cat__count">{% if col.products_count %}{{ col.products_count }} productos{% endif %}</div>
+              <div class="h2">{{ label }}</div>
+            </div>
+            <span class="cat__arrow">{% render 'icon', name: 'arrow' %}</span>
+          </div>
+        </a>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Categorías",
+  "max_blocks": 10,
+  "settings": [
+    { "type": "text", "id": "title", "label": "Título", "default": "Compra por categoría" },
+    { "type": "text", "id": "text", "label": "Texto", "default": "Zapatillas, sudaderas, camisetas y accesorios. Todo original." }
+  ],
+  "blocks": [
+    {
+      "type": "category",
+      "name": "Categoría",
+      "settings": [
+        { "type": "collection", "id": "collection", "label": "Colección" },
+        { "type": "text", "id": "label", "label": "Nombre (opcional)" },
+        { "type": "image_picker", "id": "image", "label": "Imagen (opcional)" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "Categorías", "blocks": [ { "type": "category", "settings": { "label": "Zapatillas" } }, { "type": "category", "settings": { "label": "Sudaderas" } }, { "type": "category", "settings": { "label": "Camisetas" } }, { "type": "category", "settings": { "label": "Pantalones" } }, { "type": "category", "settings": { "label": "Accesorios" } } ] }]
+}
+{% endschema %}

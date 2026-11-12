@@ -1,0 +1,84 @@
+<div class="wrap" style="padding-block:clamp(28px,5vw,80px)">
+  {%- case request.page_type -%}
+    {%- when 'customers/login' -%}
+      <div class="form-narrow">
+        <h1 class="h1">Entrar</h1>
+        {%- form 'customer_login' -%}
+          {{ form.errors | default_errors }}
+          <label class="field">Email<input type="email" name="customer[email]" autocomplete="email" required></label>
+          <label class="field">Contraseña<input type="password" name="customer[password]" autocomplete="current-password" required></label>
+          <button class="btn btn--block" type="submit">Entrar</button>
+          <p style="margin-top:12px;font-size:13px"><a class="link-u" href="{{ routes.account_register_url }}">Crear cuenta</a> · <a class="link-u" href="#recover">¿Olvidaste la contraseña?</a></p>
+        {%- endform -%}
+        <div id="recover" style="margin-top:28px">
+          {%- form 'recover_customer_password' -%}
+            {%- if form.posted_successfully? -%}<p>Te hemos enviado un email para restablecerla.</p>{%- endif -%}
+            <label class="field">Recuperar contraseña<input type="email" name="email" autocomplete="email" placeholder="tu@email.com"></label>
+            <button class="btn btn--ghost btn--block" type="submit" style="margin-top:10px">Enviar</button>
+          {%- endform -%}
+        </div>
+      </div>
+    {%- when 'customers/register' -%}
+      <div class="form-narrow">
+        <h1 class="h1">Crear cuenta</h1>
+        {%- form 'create_customer' -%}
+          {{ form.errors | default_errors }}
+          <label class="field">Nombre<input type="text" name="customer[first_name]" autocomplete="given-name"></label>
+          <label class="field">Apellidos<input type="text" name="customer[last_name]" autocomplete="family-name"></label>
+          <label class="field">Email<input type="email" name="customer[email]" autocomplete="email" required></label>
+          <label class="field">Contraseña<input type="password" name="customer[password]" autocomplete="new-password" required></label>
+          <button class="btn btn--block" type="submit">Crear cuenta</button>
+        {%- endform -%}
+      </div>
+    {%- when 'customers/account' -%}
+      <h1 class="h1" style="margin-bottom:24px">Hola, {{ customer.first_name }}</h1>
+      <p style="margin-bottom:32px"><a class="link-u" href="{{ routes.account_logout_url }}">Cerrar sesión</a></p>
+      {%- paginate customer.orders by 20 -%}
+      {%- if customer.orders.size > 0 -%}
+        <table class="table">
+          <thead><tr><th>Pedido</th><th>Fecha</th><th>Estado</th><th>Total</th></tr></thead>
+          <tbody>
+            {%- for order in customer.orders -%}
+              <tr><td><a class="link-u" href="{{ order.customer_url }}">{{ order.name }}</a></td><td>{{ order.created_at | date: '%d/%m/%Y' }}</td><td>{{ order.fulfillment_status_label }}</td><td>{{ order.total_price | money }}</td></tr>
+            {%- endfor -%}
+          </tbody>
+        </table>
+      {%- else -%}<p class="muted">Aún no tienes pedidos.</p>{%- endif -%}
+      {%- endpaginate -%}
+    {%- when 'customers/order' -%}
+      <h1 class="h1" style="margin-bottom:24px">Pedido {{ order.name }}</h1>
+      <table class="table">
+        <thead><tr><th>Producto</th><th>Cantidad</th><th>Total</th></tr></thead>
+        <tbody>{%- for li in order.line_items -%}<tr><td>{{ li.title }}</td><td>{{ li.quantity }}</td><td>{{ li.final_line_price | money }}</td></tr>{%- endfor -%}</tbody>
+      </table>
+      <p style="margin-top:20px"><b>Total: {{ order.total_price | money }}</b></p>
+      <p style="margin-top:20px"><a class="link-u" href="{{ routes.account_url }}">← Volver</a></p>
+    {%- when 'customers/addresses' -%}
+      <h1 class="h1" style="margin-bottom:24px">Direcciones</h1>
+      {%- for address in customer.addresses -%}<div class="rte" style="margin-bottom:20px">{{ address | format_address }}</div>{%- endfor -%}
+      <p><a class="link-u" href="{{ routes.account_url }}">← Volver</a></p>
+    {%- when 'customers/reset_password' -%}
+      <div class="form-narrow">
+        <h1 class="h1">Nueva contraseña</h1>
+        {%- form 'reset_customer_password' -%}
+          {{ form.errors | default_errors }}
+          <label class="field">Contraseña<input type="password" name="customer[password]" autocomplete="new-password" required></label>
+          <label class="field">Repite la contraseña<input type="password" name="customer[password_confirmation]" autocomplete="new-password" required></label>
+          <button class="btn btn--block" type="submit">Guardar</button>
+        {%- endform -%}
+      </div>
+    {%- when 'customers/activate_account' -%}
+      <div class="form-narrow">
+        <h1 class="h1">Activar cuenta</h1>
+        {%- form 'activate_customer_password' -%}
+          {{ form.errors | default_errors }}
+          <label class="field">Contraseña<input type="password" name="customer[password]" autocomplete="new-password" required></label>
+          <label class="field">Repite la contraseña<input type="password" name="customer[password_confirmation]" autocomplete="new-password" required></label>
+          <button class="btn btn--block" type="submit">Activar</button>
+        {%- endform -%}
+      </div>
+  {%- endcase -%}
+</div>
+{% schema %}
+{ "name": "Cuenta" }
+{% endschema %}

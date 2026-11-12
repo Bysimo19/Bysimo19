@@ -1,0 +1,9 @@
+<article class="wrap" style="padding-block:clamp(28px,5vw,80px);max-width:860px">
+  <span class="card__vendor">{{ article.published_at | date: '%d/%m/%Y' }}</span>
+  <h1 class="h1" style="margin:14px 0 28px">{{ article.title }}</h1>
+  {%- if article.image -%}<div class="edit__media" style="aspect-ratio:16/9;margin-bottom:32px">{{ article.image | image_url: width: 1600 | image_tag: widths: '600,1000,1600', sizes: '860px' }}</div>{%- endif -%}
+  <div class="rte">{{ article.content }}</div>
+</article>
+{% schema %}
+{ "name": "Artículo" }
+{% endschema %}

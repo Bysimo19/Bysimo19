@@ -1,0 +1,45 @@
+<section class="section">
+  <div class="wrap edit{% if section.settings.reverse %} edit--rev{% endif %}">
+    <div class="edit__media reveal" data-parallax>
+      {%- if section.settings.image != blank -%}
+        {{ section.settings.image | image_url: width: 1400 | image_tag: loading: 'lazy', widths: '500,800,1100,1400', sizes: '(min-width: 860px) 50vw, 100vw' }}
+      {%- else -%}
+        {{ 'lifestyle-1' | placeholder_svg_tag }}
+      {%- endif -%}
+    </div>
+    <div class="edit__body">
+      {%- if section.settings.kicker != blank -%}<span class="kicker">{{ section.settings.kicker }}</span>{%- endif -%}
+      <h2 class="h1">
+        {%- assign lines = section.settings.title | split: '|' -%}
+        {%- for l in lines -%}<span class="split-line" style="--i: {{ forloop.index0 }}"><span>{{ l | strip }}</span></span>{%- endfor -%}
+      </h2>
+      <div class="rte muted reveal">{{ section.settings.text }}</div>
+      {%- if section.settings.btn_label != blank -%}<div class="reveal"><a class="btn" href="{{ section.settings.btn_url }}">{{ section.settings.btn_label }} <span class="arrow">→</span></a></div>{%- endif -%}
+      {%- if section.blocks.size > 0 -%}
+        <div class="edit__stats reveal">
+          {%- for block in section.blocks -%}<div {{ block.shopify_attributes }}><b>{{ block.settings.value }}</b><span>{{ block.settings.label }}</span></div>{%- endfor -%}
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Editorial",
+  "max_blocks": 3,
+  "settings": [
+    { "type": "image_picker", "id": "image", "label": "Imagen" },
+    { "type": "checkbox", "id": "reverse", "label": "Imagen a la derecha", "default": false },
+    { "type": "text", "id": "kicker", "label": "Etiqueta", "default": "Autenticidad" },
+    { "type": "text", "id": "title", "label": "Título", "info": "Separa líneas con |", "default": "Original o | te devolvemos | el dinero" },
+    { "type": "richtext", "id": "text", "label": "Texto", "default": "<p>Cada par pasa por una revisión de 12 puntos: etiquetas, costuras, caja y materiales. Si algo no cuadra, no sale.</p>" },
+    { "type": "text", "id": "btn_label", "label": "Botón", "default": "Cómo verificamos" },
+    { "type": "url", "id": "btn_url", "label": "Enlace" }
+  ],
+  "blocks": [
+    { "type": "stat", "name": "Dato", "settings": [ { "type": "text", "id": "value", "label": "Valor", "default": "12k+" }, { "type": "text", "id": "label", "label": "Etiqueta", "default": "Pedidos enviados" } ] }
+  ],
+  "presets": [{ "name": "Editorial", "blocks": [ { "type": "stat", "settings": { "value": "12k+", "label": "Pedidos enviados" } }, { "type": "stat", "settings": { "value": "4,9★", "label": "Valoración media" } }, { "type": "stat", "settings": { "value": "24h", "label": "Envío península" } } ] }]
+}
+{% endschema %}

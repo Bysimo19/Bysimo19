@@ -1,0 +1,115 @@
+{%- comment -%}
+  Página de categoría: sin 3D, sin librerías. Render 100% servidor + filtros nativos de Shopify.
+{%- endcomment -%}
+{%- paginate collection.products by section.settings.per_page -%}
+<div class="wrap coll-hero">
+  <nav class="crumbs" aria-label="Migas"><a href="{{ routes.root_url }}">Inicio</a><span>/</span><span>{{ collection.title }}</span></nav>
+  <h1 class="h1">{{ collection.title }}<sup class="mono">{{ collection.products_count }}</sup></h1>
+  {%- if collection.description != blank and section.settings.show_description -%}<div class="rte muted">{{ collection.description }}</div>{%- endif -%}
+</div>
+
+<div class="toolbar">
+  <form class="wrap" data-filters method="get" action="{{ collection.url }}">
+    <div class="toolbar__inner">
+      {%- for filter in collection.filters -%}
+        {%- liquid
+          assign fname = filter.label | downcase
+          assign is_size = false
+          if fname contains 'talla' or fname contains 'size'
+            assign is_size = true
+          endif
+        -%}
+        <details class="filter">
+          <summary class="{% if filter.active_values.size > 0 or filter.min_value.value or filter.max_value.value %}is-active{% endif %}">
+            {{ filter.label }}{% if filter.active_values.size > 0 %} · {{ filter.active_values.size }}{% endif %}
+          </summary>
+          {%- case filter.type -%}
+            {%- when 'list', 'boolean' -%}
+              <div class="filter__panel{% if is_size %} filter__panel--sizes{% endif %}">
+                {%- for v in filter.values -%}
+                  {%- if is_size -%}
+                    <label class="sizebox"><input type="checkbox" name="{{ v.param_name }}" value="{{ v.value }}"{% if v.active %} checked{% endif %}{% if v.count == 0 and v.active == false %} disabled{% endif %}><span>{{ v.label }}</span></label>
+                  {%- else -%}
+                    <label class="chk{% if v.count == 0 and v.active == false %} is-disabled{% endif %}"><input type="checkbox" name="{{ v.param_name }}" value="{{ v.value }}"{% if v.active %} checked{% endif %}><span>{{ v.label }}</span><small>{{ v.count }}</small></label>
+                  {%- endif -%}
+                {%- endfor -%}
+              </div>
+            {%- when 'price_range' -%}
+              <div class="filter__panel">
+                <div class="price-range">
+                  <input type="number" inputmode="decimal" name="{{ filter.min_value.param_name }}" placeholder="0" min="0" value="{% if filter.min_value.value %}{{ filter.min_value.value | divided_by: 100 }}{% endif %}" aria-label="Precio mínimo">
+                  <span>—</span>
+                  <input type="number" inputmode="decimal" name="{{ filter.max_value.param_name }}" placeholder="{{ filter.range_max | divided_by: 100 }}" min="0" value="{% if filter.max_value.value %}{{ filter.max_value.value | divided_by: 100 }}{% endif %}" aria-label="Precio máximo">
+                </div>
+                <button class="btn btn--block" type="submit" style="height:42px;margin-top:6px">Aplicar</button>
+              </div>
+          {%- endcase -%}
+        </details>
+      {%- endfor -%}
+
+      <div class="toolbar__right">
+        <label class="visually-hidden" for="SortBy">Ordenar</label>
+        <select class="select" id="SortBy" name="sort_by">
+          {%- assign sort_by = collection.sort_by | default: collection.default_sort_by -%}
+          {%- for option in collection.sort_options -%}
+            <option value="{{ option.value }}"{% if option.value == sort_by %} selected{% endif %}>{{ option.name }}</option>
+          {%- endfor -%}
+        </select>
+        <div class="cols-toggle" aria-label="Columnas">
+          <button type="button" data-cols="3" aria-label="3 columnas"><svg width="18" height="18" viewBox="0 0 18 18" fill="currentColor"><rect width="4.5" height="18"/><rect x="6.75" width="4.5" height="18"/><rect x="13.5" width="4.5" height="18"/></svg></button>
+          <button type="button" data-cols="4" class="is-active" aria-label="4 columnas"><svg width="18" height="18" viewBox="0 0 18 18" fill="currentColor"><rect width="3" height="18"/><rect x="5" width="3" height="18"/><rect x="10" width="3" height="18"/><rect x="15" width="3" height="18"/></svg></button>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+
+<div class="wrap coll-grid">
+  {%- assign has_active = false -%}
+  {%- for filter in collection.filters -%}{%- if filter.active_values.size > 0 or filter.min_value.value or filter.max_value.value -%}{%- assign has_active = true -%}{%- endif -%}{%- endfor -%}
+  {%- if has_active -%}
+    <div class="pills" style="padding:0 0 20px">
+      {%- for filter in collection.filters -%}
+        {%- for v in filter.active_values -%}<a class="pill" href="{{ v.url_to_remove }}">{{ v.label }} ✕</a>{%- endfor -%}
+        {%- if filter.min_value.value or filter.max_value.value -%}<a class="pill" href="{{ filter.url_to_remove }}">Precio ✕</a>{%- endif -%}
+      {%- endfor -%}
+      <a class="pill pill--ghost" href="{{ collection.url }}?sort_by={{ collection.sort_by }}">Borrar filtros</a>
+    </div>
+  {%- endif -%}
+
+  {%- if collection.products.size > 0 -%}
+    <div class="grid" data-grid>
+      {%- for product in collection.products -%}
+        {% render 'product-card', product: product, index: forloop.index0, eager: true %}
+      {%- endfor -%}
+    </div>
+  {%- else -%}
+    <div class="empty">
+      <p class="h3">No hay productos con estos filtros</p>
+      <a class="btn" href="{{ collection.url }}">Ver todo</a>
+    </div>
+  {%- endif -%}
+
+  {%- if paginate.pages > 1 -%}
+    <nav class="pagination" aria-label="Paginación">
+      {%- if paginate.previous -%}<a href="{{ paginate.previous.url }}" aria-label="Anterior">←</a>{%- endif -%}
+      {%- for part in paginate.parts -%}
+        {%- if part.is_link -%}<a href="{{ part.url }}">{{ part.title }}</a>
+        {%- elsif part.title == paginate.current_page -%}<span class="current" aria-current="page">{{ part.title }}</span>
+        {%- else -%}<span>{{ part.title }}</span>{%- endif -%}
+      {%- endfor -%}
+      {%- if paginate.next -%}<a href="{{ paginate.next.url }}" aria-label="Siguiente">→</a>{%- endif -%}
+    </nav>
+  {%- endif -%}
+</div>
+{%- endpaginate -%}
+
+{% schema %}
+{
+  "name": "Colección",
+  "settings": [
+    { "type": "range", "id": "per_page", "label": "Productos por página", "min": 12, "max": 48, "step": 4, "default": 24 },
+    { "type": "checkbox", "id": "show_description", "label": "Mostrar descripción", "default": true }
+  ]
+}
+{% endschema %}

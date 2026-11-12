@@ -1,0 +1,53 @@
+{%- assign c = section.settings.collection -%}
+<section class="section" data-rail>
+  <div class="wrap section__head">
+    <div style="display:grid;gap:16px">
+      {%- if section.settings.kicker != blank -%}<span class="kicker">{{ section.settings.kicker }}</span>{%- endif -%}
+      <h2 class="h2"><span class="split-line"><span>{{ section.settings.title }}</span></span></h2>
+    </div>
+    <div style="display:flex;gap:16px;align-items:center">
+      <a class="link-u" href="{{ c.url | default: routes.all_products_collection_url }}">Ver todo{% if c.products_count > 0 %} ({{ c.products_count }}){% endif %}</a>
+      {%- if section.settings.layout == 'rail' -%}
+        <div class="rail-nav">
+          <button type="button" data-prev aria-label="Anterior">{% render 'icon', name: 'arrow-left' %}</button>
+          <button type="button" data-next aria-label="Siguiente">{% render 'icon', name: 'arrow' %}</button>
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+
+  {%- if section.settings.layout == 'rail' -%}
+    <div class="rail">
+      {%- for product in c.products limit: section.settings.limit -%}
+        {% render 'product-card', product: product, index: forloop.index0, sizes: '(min-width: 860px) 24vw, 70vw' %}
+      {%- else -%}
+        {%- for i in (1..6) -%}
+          <div class="card"><div class="card__media">{{ 'product-apparel-1' | placeholder_svg_tag }}</div><div class="card__title">Producto de ejemplo</div></div>
+        {%- endfor -%}
+      {%- endfor -%}
+    </div>
+    <div class="rail-progress"><i></i></div>
+  {%- else -%}
+    <div class="wrap">
+      <div class="grid">
+        {%- for product in c.products limit: section.settings.limit -%}
+          {% render 'product-card', product: product, index: forloop.index0 %}
+        {%- endfor -%}
+      </div>
+    </div>
+  {%- endif -%}
+</section>
+
+{% schema %}
+{
+  "name": "Colección destacada",
+  "settings": [
+    { "type": "text", "id": "kicker", "label": "Etiqueta", "default": "Recién llegado" },
+    { "type": "text", "id": "title", "label": "Título", "default": "Novedades" },
+    { "type": "collection", "id": "collection", "label": "Colección" },
+    { "type": "range", "id": "limit", "label": "Productos", "min": 4, "max": 16, "step": 1, "default": 10 },
+    { "type": "select", "id": "layout", "label": "Diseño", "options": [ { "value": "rail", "label": "Carrusel" }, { "value": "grid", "label": "Rejilla" } ], "default": "rail" }
+  ],
+  "presets": [{ "name": "Colección destacada" }]
+}
+{% endschema %}

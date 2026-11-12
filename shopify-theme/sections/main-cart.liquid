@@ -1,0 +1,41 @@
+<div class="wrap" style="padding-block:clamp(28px,5vw,64px);max-width:1100px">
+  <h1 class="h1" style="margin-bottom:28px">Carrito</h1>
+  {%- if cart.item_count > 0 -%}
+    <form action="{{ routes.cart_url }}" method="post" novalidate>
+      {%- for item in cart.items -%}
+        <div class="line">
+          <a href="{{ item.url }}">{%- if item.image -%}{{ item.image | image_url: width: 240 | image_tag: loading: 'lazy', alt: item.product.title }}{%- endif -%}</a>
+          <div>
+            <a class="line__title" href="{{ item.url }}">{{ item.product.title }}</a>
+            {%- unless item.product.has_only_default_variant -%}<div class="line__variant">{{ item.variant.title }}</div>{%- endunless -%}
+            <div class="qty">
+              <a href="{{ routes.cart_change_url }}?line={{ forloop.index }}&quantity={{ item.quantity | minus: 1 }}" aria-label="Quitar uno">−</a>
+              <input type="number" name="updates[]" value="{{ item.quantity }}" min="0" aria-label="Cantidad">
+              <a href="{{ routes.cart_change_url }}?line={{ forloop.index }}&quantity={{ item.quantity | plus: 1 }}" aria-label="Añadir uno">+</a>
+            </div>
+            <a class="line__rm" href="{{ item.url_to_remove }}">Eliminar</a>
+          </div>
+          <div class="price">{%- if item.original_line_price > item.final_line_price -%}<s>{{ item.original_line_price | money }}</s>{%- endif -%}{{ item.final_line_price | money }}</div>
+        </div>
+      {%- endfor -%}
+      <div style="display:grid;gap:12px;justify-items:end;margin-top:28px">
+        <div class="totals" style="gap:40px"><span>Subtotal</span><span class="mono">{{ cart.total_price | money }}</span></div>
+        <p class="muted" style="font-size:13px">Impuestos incluidos. Envío calculado en el checkout.</p>
+        <div style="display:flex;gap:10px;flex-wrap:wrap">
+          <button class="btn btn--ghost" type="submit" name="update">Actualizar</button>
+          <button class="btn" type="submit" name="checkout">Finalizar compra <span class="arrow">→</span></button>
+        </div>
+        {%- if additional_checkout_buttons -%}<div>{{ content_for_additional_checkout_buttons }}</div>{%- endif -%}
+      </div>
+    </form>
+  {%- else -%}
+    <div class="cart-empty">
+      <p class="h3">Tu carrito está vacío</p>
+      <a class="btn" href="{{ routes.all_products_collection_url }}">Ver novedades <span class="arrow">→</span></a>
+    </div>
+  {%- endif -%}
+</div>
+
+{% schema %}
+{ "name": "Carrito" }
+{% endschema %}

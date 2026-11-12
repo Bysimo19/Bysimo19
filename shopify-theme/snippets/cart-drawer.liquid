@@ -1,0 +1,24 @@
+<div class="drawer drawer--right" id="CartDrawer" aria-hidden="true" inert data-free-shipping="{{ settings.free_shipping_threshold }}">
+  <div class="drawer__scrim" data-close></div>
+  <aside class="drawer__panel" role="dialog" aria-modal="true" aria-label="Carrito">
+    <div class="drawer__head">
+      <span class="h3">Carrito <sup class="mono" data-cart-count>{{ cart.item_count }}</sup></span>
+      <button class="icon-btn" data-close aria-label="Cerrar">{% render 'icon', name: 'close' %}</button>
+    </div>
+    <div class="drawer__body">
+      <div class="ship-bar" data-ship hidden>
+        <span data-ship-text></span>
+        <div class="ship-bar__track"><i></i></div>
+      </div>
+      <div data-cart-body></div>
+    </div>
+    <div class="drawer__foot" data-cart-foot hidden>
+      <div class="totals"><span>Subtotal</span><span class="mono" data-cart-total></span></div>
+      <p class="muted" style="font-size:12px;margin-bottom:14px">Impuestos incluidos. Envío calculado en el checkout.</p>
+      <form action="{{ routes.cart_url }}" method="post">
+        <button class="btn btn--block" type="submit" name="checkout">Finalizar compra <span class="arrow">→</span></button>
+      </form>
+      <a href="{{ routes.cart_url }}" class="link-u" style="display:block;text-align:center;margin-top:12px;font-size:13px">Ver carrito</a>
+    </div>
+  </aside>
+</div>

@@ -1,0 +1,10 @@
+<div class="search-ov" id="SearchOverlay" role="dialog" aria-modal="true" aria-label="Buscar">
+  <div class="wrap">
+    <form class="search-ov__form" action="{{ routes.search_url }}" method="get" role="search">
+      <input type="hidden" name="type" value="product">
+      <input type="search" name="q" placeholder="Buscar" autocomplete="off" aria-label="Buscar productos">
+      <button type="button" class="icon-btn" data-close aria-label="Cerrar">{% render 'icon', name: 'close' %}</button>
+    </form>
+    <div class="search-ov__res" data-search-results aria-live="polite"></div>
+  </div>
+</div>

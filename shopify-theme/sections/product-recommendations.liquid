@@ -1,0 +1,24 @@
+<section class="section" style="padding-top:0">
+  <div class="wrap section__head">
+    <h2 class="h2">{{ section.settings.title }}</h2>
+  </div>
+  <div class="wrap" data-recs="{{ routes.product_recommendations_url }}?section_id={{ section.id }}&product_id={{ product.id }}&limit={{ section.settings.limit }}">
+    {%- if recommendations.performed? and recommendations.products_count > 0 -%}
+      <div class="grid" data-recs-inner>
+        {%- for p in recommendations.products -%}
+          {% render 'product-card', product: p, index: forloop.index0 %}
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Recomendados",
+  "settings": [
+    { "type": "text", "id": "title", "label": "Título", "default": "También te puede gustar" },
+    { "type": "range", "id": "limit", "label": "Productos", "min": 4, "max": 8, "step": 4, "default": 4 }
+  ]
+}
+{% endschema %}

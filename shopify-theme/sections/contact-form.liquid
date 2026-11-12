@@ -1,0 +1,16 @@
+<div class="wrap">
+  <div class="form-narrow" style="margin-top:0">
+    {%- form 'contact' -%}
+      {%- if form.posted_successfully? -%}<p class="news__ok" style="color:inherit">Mensaje enviado. Respondemos en menos de 24 h.</p>{%- endif -%}
+      {{ form.errors | default_errors }}
+      <label class="field">Nombre<input type="text" name="contact[name]" autocomplete="name"></label>
+      <label class="field">Email<input type="email" name="contact[email]" autocomplete="email" required></label>
+      <label class="field">Nº de pedido (opcional)<input type="text" name="contact[pedido]"></label>
+      <label class="field">Mensaje<textarea name="contact[body]" required></textarea></label>
+      <button class="btn btn--block" type="submit">Enviar</button>
+    {%- endform -%}
+  </div>
+</div>
+{% schema %}
+{ "name": "Formulario de contacto", "presets": [{ "name": "Formulario de contacto" }] }
+{% endschema %}

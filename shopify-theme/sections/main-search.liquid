@@ -1,0 +1,25 @@
+{%- paginate search.results by 24 -%}
+<div class="wrap coll-hero">
+  <h1 class="h1">{% if search.performed %}“{{ search.terms }}”<sup class="mono">{{ search.results_count }}</sup>{% else %}Buscar{% endif %}</h1>
+  <form action="{{ routes.search_url }}" method="get" class="news__form" style="max-width:560px;background:var(--card)">
+    <input type="hidden" name="type" value="product">
+    <input type="search" name="q" value="{{ search.terms | escape }}" placeholder="Jordan, Dunk, hoodie…" style="color:var(--fg)" aria-label="Buscar">
+    <button class="btn" type="submit">Buscar</button>
+  </form>
+</div>
+<div class="wrap coll-grid">
+  {%- if search.performed and search.results_count == 0 -%}
+    <div class="empty"><p class="h3">Sin resultados</p><a class="btn" href="{{ routes.all_products_collection_url }}">Ver todo</a></div>
+  {%- else -%}
+    <div class="grid">
+      {%- for item in search.results -%}
+        {%- if item.object_type == 'product' -%}{% render 'product-card', product: item, index: forloop.index0 %}{%- endif -%}
+      {%- endfor -%}
+    </div>
+  {%- endif -%}
+  {%- if paginate.pages > 1 -%}<nav class="pagination">{{ paginate | default_pagination: previous: '←', next: '→' }}</nav>{%- endif -%}
+</div>
+{%- endpaginate -%}
+{% schema %}
+{ "name": "Búsqueda" }
+{% endschema %}

@@ -1,0 +1,87 @@
+<!doctype html>
+<html class="no-js" lang="{{ request.locale.iso_code }}">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="theme-color" content="{{ settings.color_bg }}">
+    <link rel="canonical" href="{{ canonical_url }}">
+    <link rel="preconnect" href="https://cdn.shopify.com" crossorigin>
+    {%- if settings.favicon != blank -%}
+      <link rel="icon" type="image/png" href="{{ settings.favicon | image_url: width: 64, height: 64 }}">
+    {%- endif -%}
+
+    <title>
+      {{ page_title }}
+      {%- if current_tags %} &ndash; {{ current_tags | join: ', ' }}{% endif -%}
+      {%- if current_page != 1 %} &ndash; Página {{ current_page }}{% endif -%}
+      {%- unless page_title contains shop.name %} &ndash; {{ shop.name }}{% endunless -%}
+    </title>
+    {% if page_description %}<meta name="description" content="{{ page_description | escape }}">{% endif %}
+    {% render 'meta-tags' %}
+
+    {%- liquid
+      assign fh = settings.font_heading
+      assign fb = settings.font_body
+      assign fb_bold = fb | font_modify: 'weight', 'bold'
+    -%}
+    {%- unless fh.system? %}{{ fh | font_url | preload_tag: as: 'font', type: 'font/woff2', crossorigin: true }}{% endunless -%}
+    {%- unless fb.system? %}{{ fb | font_url | preload_tag: as: 'font', type: 'font/woff2', crossorigin: true }}{% endunless -%}
+
+    <style>
+      {{ fh | font_face: font_display: 'swap' }}
+      {{ fb | font_face: font_display: 'swap' }}
+      {{ fb_bold | font_face: font_display: 'swap' }}
+      :root {
+        --bg: {{ settings.color_bg }};
+        --fg: {{ settings.color_fg }};
+        --muted: {{ settings.color_muted }};
+        --card: {{ settings.color_card }};
+        --accent: {{ settings.color_accent }};
+        --accent-fg: {{ settings.color_accent_fg }};
+        --hero-bg: {{ settings.color_hero_bg }};
+        --hero-fg: {{ settings.color_hero_fg }};
+        --sale: {{ settings.color_sale }};
+        --line: {{ settings.color_fg | color_modify: 'alpha', 0.12 }};
+        --radius: {{ settings.radius }}px;
+        --fh: {{ fh.family }}, {{ fh.fallback_families }};
+        --fh-weight: {{ settings.heading_weight }};
+        --fb: {{ fb.family }}, {{ fb.fallback_families }};
+        --fb-weight: {{ fb.weight }};
+      }
+    </style>
+
+    {{ 'base.css' | asset_url | stylesheet_tag }}
+    <script>
+      window.theme = {
+        moneyFormat: {{ shop.money_format | json }},
+        cartType: {{ settings.cart_type | json }},
+        routes: {
+          cart: {{ routes.cart_url | json }},
+          cartAdd: {{ routes.cart_add_url | json }},
+          cartChange: {{ routes.cart_change_url | json }},
+          search: {{ routes.search_url | json }},
+          all: {{ routes.all_products_collection_url | json }}
+        }
+      };
+    </script>
+    <script src="{{ 'theme.js' | asset_url }}" defer></script>
+
+    {{ content_for_header }}
+  </head>
+
+  <body class="template-{{ template.name | handle }}">
+    <a class="skip-link" href="#MainContent">Saltar al contenido</a>
+
+    {% section 'header' %}
+
+    <main id="MainContent" role="main" tabindex="-1">
+      {{ content_for_layout }}
+    </main>
+
+    {% section 'footer' %}
+
+    {% render 'cart-drawer' %}
+    {% render 'search-overlay' %}
+  </body>
+</html>

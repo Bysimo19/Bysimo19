@@ -1,0 +1,172 @@
+{%- liquid
+  assign current = product.selected_or_first_available_variant
+  assign form_id = 'ProductForm-' | append: section.id
+-%}
+<div class="wrap" data-product>
+  <div class="pdp">
+    <div>
+      <div class="pdp__gallery">
+        {%- for media in product.media -%}
+          <figure data-media-id="{{ media.id }}">
+            {%- case media.media_type -%}
+              {%- when 'image' -%}
+                {%- liquid
+                  assign load = 'lazy'
+                  if forloop.index < 3
+                    assign load = 'eager'
+                  endif
+                -%}
+                {{ media | image_url: width: 1600 | image_tag: loading: load, widths: '500,800,1100,1400,1600', sizes: '(min-width: 860px) 55vw, 100vw', alt: media.alt | default: product.title }}
+              {%- when 'video' -%}
+                {{ media | video_tag: autoplay: true, loop: true, muted: true, playsinline: true, controls: false }}
+              {%- when 'external_video' -%}
+                {{ media | external_video_tag }}
+              {%- when 'model' -%}
+                {{ media | model_viewer_tag }}
+            {%- endcase -%}
+          </figure>
+        {%- else -%}
+          <figure>{{ 'product-apparel-1' | placeholder_svg_tag }}</figure>
+        {%- endfor -%}
+      </div>
+      {%- if product.media.size > 1 -%}
+        <div class="pdp__dots" aria-hidden="true">{%- for m in product.media -%}<i{% if forloop.first %} class="is-on"{% endif %}></i>{%- endfor -%}</div>
+      {%- endif -%}
+    </div>
+
+    <div class="pdp__info">
+      <nav class="crumbs" aria-label="Migas">
+        <a href="{{ routes.root_url }}">Inicio</a><span>/</span>
+        {%- if collection -%}<a href="{{ collection.url }}">{{ collection.title }}</a><span>/</span>{%- endif -%}
+        <span>{{ product.vendor }}</span>
+      </nav>
+
+      <div style="display:grid;gap:12px">
+        <span class="card__vendor">{{ product.vendor }}</span>
+        <h1 class="h1 pdp__title">{{ product.title }}</h1>
+        <div class="pdp__price" data-price>
+          {%- if current.compare_at_price > current.price -%}<s>{{ current.compare_at_price | money }}</s> {% endif -%}
+          <span>{{ current.price | money }}</span>
+        </div>
+        {%- if cart.taxes_included -%}<span class="muted" style="font-size:12px">Impuestos incluidos.</span>{%- endif -%}
+      </div>
+
+      {%- form 'product', product, id: form_id, class: 'pdp__buy', novalidate: 'novalidate' -%}
+        <input type="hidden" name="id" value="{{ current.id }}">
+        {%- unless product.has_only_default_variant -%}
+          {%- for option in product.options_with_values -%}
+            <fieldset class="opt" data-option-index="{{ forloop.index0 }}">
+              <legend>{{ option.name }} <span>{{ option.selected_value }}</span></legend>
+              <div class="opt__values">
+                {%- for value in option.values -%}
+                  <label>
+                    <input type="radio" name="option-{{ forloop.parentloop.index0 }}-{{ section.id }}" value="{{ value | escape }}"{% if option.selected_value == value %} checked{% endif %}>
+                    <span>{{ value }}</span>
+                  </label>
+                {%- endfor -%}
+              </div>
+            </fieldset>
+          {%- endfor -%}
+        {%- endunless -%}
+
+        {%- liquid
+          assign stock_class = ''
+          assign stock_text = 'En stock · envío en 24/48h'
+          if current.available == false
+            assign stock_class = ' is-out'
+            assign stock_text = 'Agotado en esta talla'
+          elsif current.inventory_management == 'shopify' and current.inventory_quantity > 0 and current.inventory_quantity <= 3
+            assign stock_class = ' is-low'
+            assign stock_text = 'Últimas ' | append: current.inventory_quantity | append: ' unidades'
+          endif
+        -%}
+        <p class="pdp__stock{{ stock_class }}" data-stock>{{ stock_text }}</p>
+
+        <button class="btn btn--block" type="submit" data-atc{% unless current.available %} disabled{% endunless %} style="height:58px">
+          <span>{% if current.available %}Añadir al carrito{% else %}Agotado{% endif %}</span>
+        </button>
+        {{ form | payment_button }}
+      {%- endform -%}
+
+      <div class="pdp__usp">
+        <div>{% render 'icon', name: 'shield' %}<span>100% original verificado</span></div>
+        <div>{% render 'icon', name: 'truck' %}<span>{{ settings.shipping_short }}</span></div>
+        <div>{% render 'icon', name: 'return' %}<span>Devolución 14 días</span></div>
+      </div>
+
+      <div class="acc">
+        {%- if product.description != blank -%}
+          <details open><summary>Descripción</summary><div class="rte">{{ product.description }}</div></details>
+        {%- endif -%}
+        {%- for block in section.blocks -%}
+          <details {{ block.shopify_attributes }}><summary>{{ block.settings.title }}</summary><div class="rte">{{ block.settings.content }}{% if block.settings.page != blank %}{{ pages[block.settings.page].content }}{% endif %}</div></details>
+        {%- endfor -%}
+      </div>
+    </div>
+  </div>
+
+  <script type="application/json" data-product-json>
+    {
+      "id": {{ product.id }},
+      "variants": [
+        {%- for v in product.variants -%}
+          {
+            "id": {{ v.id }},
+            "options": {{ v.options | json }},
+            "available": {{ v.available | json }},
+            "price": {{ v.price }},
+            "compare_at_price": {{ v.compare_at_price | default: 0 }},
+            "inventory_quantity": {% if v.inventory_management == 'shopify' and v.inventory_policy == 'deny' %}{{ v.inventory_quantity }}{% else %}null{% endif %},
+            "featured_media": {% if v.featured_media %}{ "id": {{ v.featured_media.id }} }{% else %}null{% endif %}
+          }{% unless forloop.last %},{% endunless %}
+        {%- endfor -%}
+      ]
+    }
+  </script>
+
+  <div class="sticky-atc">
+    <button class="btn btn--block" type="button" style="height:56px;box-shadow:0 12px 30px -10px rgba(0,0,0,.4)">
+      Añadir · <span data-sticky-price>{{ current.price | money }}</span>
+    </button>
+  </div>
+</div>
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org/",
+    "@type": "Product",
+    "name": {{ product.title | json }},
+    "brand": { "@type": "Brand", "name": {{ product.vendor | json }} },
+    "description": {{ product.description | strip_html | truncate: 500 | json }},
+    {%- if product.featured_image -%}"image": [{{ product.featured_image | image_url: width: 1200 | prepend: 'https:' | json }}],{%- endif -%}
+    "offers": [
+      {%- for v in product.variants -%}
+        {
+          "@type": "Offer",
+          {%- if v.sku != blank -%}"sku": {{ v.sku | json }},{%- endif -%}
+          "availability": "http://schema.org/{% if v.available %}InStock{% else %}OutOfStock{% endif %}",
+          "price": {{ v.price | divided_by: 100.00 | json }},
+          "priceCurrency": {{ cart.currency.iso_code | json }},
+          "url": {{ request.origin | append: v.url | json }}
+        }{% unless forloop.last %},{% endunless %}
+      {%- endfor -%}
+    ]
+  }
+</script>
+
+{% schema %}
+{
+  "name": "Producto",
+  "blocks": [
+    {
+      "type": "tab",
+      "name": "Desplegable",
+      "settings": [
+        { "type": "text", "id": "title", "label": "Título", "default": "Envíos y devoluciones" },
+        { "type": "richtext", "id": "content", "label": "Contenido" },
+        { "type": "page", "id": "page", "label": "O contenido de una página" }
+      ]
+    }
+  ]
+}
+{% endschema %}
