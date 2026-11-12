@@ -103,9 +103,17 @@
 
   // Hero 3D: rellenar el JSON antes de que corra hero-3d.js
   const heroData = document.querySelector('[data-hero-items]');
-  if (heroData) heroData.textContent = JSON.stringify(P.map((it, i) => ({
-    img: imgs[i], title: `${it.v} ${it.t}`, url: 'producto.html', price: fmt(it.p),
-    compare: it.c ? fmt(it.c) : null, badge: it.c ? `-${Math.round((1 - it.p / it.c) * 100)}%` : null,
+  // Fotos reales del anillo (precios de ejemplo)
+  const HERO = [
+    { img: 'img/burberry-check-chaqueta.jpg', title: 'Burberry Chaqueta Check con capucha', price: 690 },
+    { img: 'img/dior-oblique-knit-down.jpg', title: 'Dior Chaqueta Oblique punto y plumas', price: 1450, compare: 1690 },
+    { img: 'img/gucci-rhyton.jpg', title: 'Gucci Rhyton GG Supreme', price: 590 },
+    { img: 'img/dior-oblique-puffer.jpg', title: 'Dior Plumífero Oblique', price: 1890 },
+    { img: 'img/burberry-check-gorra.jpg', title: 'Burberry Gorra Check', price: 320 },
+  ];
+  if (heroData) heroData.textContent = JSON.stringify(HERO.map((it) => ({
+    img: it.img, title: it.title, url: 'producto.html', price: fmt(it.price),
+    compare: it.compare ? fmt(it.compare) : null, badge: it.compare ? `-${Math.round((1 - it.price / it.compare) * 100)}%` : null,
   })));
 
   document.querySelectorAll('[data-demo]').forEach((el) => {

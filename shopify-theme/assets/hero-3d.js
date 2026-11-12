@@ -25,7 +25,8 @@
   /* ---------- Config ---------- */
   const isMobile = matchMedia('(max-width: 860px)').matches;
   const MIN = 9;
-  while (items.length < MIN) items = items.concat(items.slice(0, MIN - items.length));
+  const base = items.slice();
+  while (items.length < MIN) items = items.concat(base);
   if (items.length > 14) items = items.slice(0, 14);
   const N = items.length;
   const R = 3.3;
@@ -120,6 +121,69 @@
 
   /* ---------- Texturas ---------- */
   const planeAspect = W / H;
+
+  // Coloca el producto en una tarjeta 4:5: detecta dónde está la prenda
+  // (quita el margen vacío de la foto), la centra y rellena con su color de fondo.
+  function fitImage(img) {
+    try {
+      const iw = img.naturalWidth, ih = img.naturalHeight;
+      // 1) Analizar una copia pequeña
+      const k = Math.min(1, 220 / Math.max(iw, ih));
+      const aw = Math.max(1, Math.round(iw * k)), ah = Math.max(1, Math.round(ih * k));
+      const a = document.createElement('canvas'); a.width = aw; a.height = ah;
+      const ax = a.getContext('2d', { willReadFrequently: true });
+      ax.drawImage(img, 0, 0, aw, ah);
+      const d = ax.getImageData(0, 0, aw, ah).data;
+      const px = (x, y) => (y * aw + x) * 4;
+      // color de fondo = media de las esquinas opacas
+      let r = 0, g = 0, b = 0, n = 0;
+      [[1, 1], [aw - 2, 1], [1, ah - 2], [aw - 2, ah - 2]].forEach(([x, y]) => {
+        const i = px(Math.max(0, x), Math.max(0, y));
+        if (d[i + 3] > 200) { r += d[i]; g += d[i + 1]; b += d[i + 2]; n++; }
+      });
+      const bg = n ? [r / n, g / n, b / n] : [243, 243, 241];
+      // 2) Caja del producto: píxeles que se separan del fondo
+      let x0 = aw, y0 = ah, x1 = -1, y1 = -1;
+      for (let y = 0; y < ah; y++) for (let x = 0; x < aw; x++) {
+        const i = px(x, y);
+        const diff = d[i + 3] < 40 ? 0 : Math.abs(d[i] - bg[0]) + Math.abs(d[i + 1] - bg[1]) + Math.abs(d[i + 2] - bg[2]);
+        if (diff > 36) { if (x < x0) x0 = x; if (x > x1) x1 = x; if (y < y0) y0 = y; if (y > y1) y1 = y; }
+      }
+      let sx = 0, sy = 0, sw = iw, sh = ih;
+      if (x1 > x0 && y1 > y0 && (x1 - x0) * (y1 - y0) > aw * ah * 0.02) {
+        sx = Math.max(0, (x0 - 1) / k); sy = Math.max(0, (y0 - 1) / k);
+        sw = Math.min(iw - sx, (x1 - x0 + 3) / k); sh = Math.min(ih - sy, (y1 - y0 + 3) / k);
+      }
+      // 3) Componer la tarjeta
+      const TW = 640, TH = Math.round(TW / planeAspect);
+      const cv = document.createElement('canvas'); cv.width = TW; cv.height = TH;
+      const x = cv.getContext('2d');
+      x.fillStyle = `rgb(${bg.map(Math.round).join(',')})`;
+      x.fillRect(0, 0, TW, TH);
+      const pa = sw / sh;
+      const pad = pa > 1.3 ? 0.07 : 0.11;            // zapatillas y gorras apaisadas: menos margen lateral
+      const sc = Math.min((TW * (1 - pad * 2)) / sw, (TH * (1 - pad * 2.4)) / sh);
+      const dw = sw * sc, dh = sh * sc;
+      // sombra de suelo suave
+      x.save(); x.filter = 'blur(14px)'; x.fillStyle = 'rgba(0,0,0,0.13)';
+      x.beginPath(); x.ellipse(TW / 2, (TH + dh) / 2 + 6, dw * 0.42, 12, 0, 0, Math.PI * 2); x.fill(); x.restore();
+      // la foto se funde con el fondo en sus bordes (evita el "recuadro" si el fondo no es liso)
+      const t = document.createElement('canvas'); t.width = Math.ceil(dw); t.height = Math.ceil(dh);
+      const tx = t.getContext('2d');
+      tx.drawImage(img, sx, sy, sw, sh, 0, 0, dw, dh);
+      tx.globalCompositeOperation = 'destination-in';
+      const f = Math.max(6, Math.min(dw, dh) * 0.05);
+      const gh = tx.createLinearGradient(0, 0, dw, 0);
+      gh.addColorStop(0, 'rgba(0,0,0,0)'); gh.addColorStop(f / dw, '#000'); gh.addColorStop(1 - f / dw, '#000'); gh.addColorStop(1, 'rgba(0,0,0,0)');
+      tx.fillStyle = gh; tx.fillRect(0, 0, dw, dh);
+      const gv = tx.createLinearGradient(0, 0, 0, dh);
+      gv.addColorStop(0, 'rgba(0,0,0,0)'); gv.addColorStop(f / dh, '#000'); gv.addColorStop(1 - f / dh, '#000'); gv.addColorStop(1, 'rgba(0,0,0,0)');
+      tx.fillStyle = gv; tx.fillRect(0, 0, dw, dh);
+      x.drawImage(t, (TW - dw) / 2, (TH - dh) / 2);
+      return cv;
+    } catch (e) { return null; } // imagen sin CORS: se usa recorte "cover"
+  }
+
   const cards = items.map((it, i) => {
     const tex = gl.createTexture();
     gl.bindTexture(gl.TEXTURE_2D, tex);
@@ -134,9 +198,13 @@
       img.decoding = 'async';
       img.onload = () => {
         gl.bindTexture(gl.TEXTURE_2D, tex);
-        try { gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, img); } catch (e) { return; }
-        const ia = img.naturalWidth / img.naturalHeight;
-        card.cover = ia > planeAspect ? [planeAspect / ia, 1] : [1, ia / planeAspect];
+        const fitted = fitImage(img);
+        try { gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, fitted || img); } catch (e) { return; }
+        if (fitted) card.cover = [1, 1];
+        else {
+          const ia = img.naturalWidth / img.naturalHeight;
+          card.cover = ia > planeAspect ? [planeAspect / ia, 1] : [1, ia / planeAspect];
+        }
         card.target = 1;
         wake();
       };
