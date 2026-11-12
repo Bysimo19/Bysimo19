@@ -4,7 +4,7 @@
     assign source = collections.all
   endif
 -%}
-<section class="hero" data-hero3d aria-label="{{ section.settings.title_1 | escape }} {{ section.settings.title_2 | escape }}">
+<section class="hero" data-hero3d data-remove-bg="{{ section.settings.remove_bg }}" aria-label="{{ section.settings.title_1 | escape }} {{ section.settings.title_2 | escape }}">
   <div class="hero__bg" aria-hidden="true"></div>
 
   <div class="hero__title">
@@ -76,6 +76,7 @@
   "class": "hero-section",
   "settings": [
     { "type": "collection", "id": "collection", "label": "Colección del anillo 3D", "info": "Se usan las fotos principales. Mejor con fondo uniforme. Vacío = todos los productos." },
+    { "type": "checkbox", "id": "remove_bg", "label": "Quitar fondo liso de las fotos automáticamente", "info": "Para el mejor resultado sube fotos PNG sin fondo (en Shopify: editar imagen → Quitar fondo).", "default": true },
     { "type": "range", "id": "limit", "label": "Productos en el anillo", "min": 6, "max": 14, "step": 1, "default": 12 },
     { "type": "text", "id": "kicker", "label": "Etiqueta superior", "default": "Drop 07 — Otoño/Invierno 26" },
     { "type": "text", "id": "title_1", "label": "Titular línea 1", "default": "Nueva" },

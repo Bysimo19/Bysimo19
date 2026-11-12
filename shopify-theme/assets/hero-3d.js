@@ -14,6 +14,7 @@
   const focusEl = root.querySelector('[data-hero-focus]');
   const countEl = root.querySelector('[data-hero-count]');
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const removeBg = root.dataset.removeBg !== 'false';
 
   let items = [];
   try { items = JSON.parse(dataEl.textContent || '[]'); } catch (e) { items = []; }
@@ -45,14 +46,16 @@
     varying vec2 vUv; varying float vZ;
     void main(){
       vUv = aUv;
-      float a = uA0 + (aUv.x - 0.5) * uSpan;
-      float bulge = sin(aUv.x * 3.14159) * uVel;
-      float r = uR + bulge * 0.55;
-      float wave = sin(uTime * 0.9 + uA0 * 3.0) * 0.07;
-      float y = (aUv.y - 0.5) * uH + wave + sin(a * 2.0 + uTime * 0.6) * 0.04 * (1.0 - aUv.y);
-      vec4 wp = vec4(sin(a) * r, y, cos(a) * r, 1.0);
-      vZ = wp.z;
-      gl_Position = uProj * uView * wp;
+      // plano recto colocado sobre el anillo, mirando hacia fuera
+      vec3 n = vec3(sin(uA0), 0.0, cos(uA0));
+      vec3 t = vec3(cos(uA0), 0.0, -sin(uA0));
+      float off = (aUv.x - 0.5) * uSpan * uR;
+      float bulge = sin(aUv.x * 3.14159) * uVel * 0.35;   // ligera curva al girar rápido
+      float wave = sin(uTime * 0.9 + uA0 * 3.0) * 0.07;    // flotación
+      float y = (aUv.y - 0.5) * uH + wave;
+      vec3 p = n * (uR + bulge) + t * off + vec3(0.0, y, 0.0);
+      vZ = p.z;
+      gl_Position = uProj * uView * vec4(p, 1.0);
     }`;
   const FS = `
     precision mediump float;
@@ -67,17 +70,14 @@
       float d = sdRound(p, vec2(uAspect * 0.5, 0.5), 0.045);
       float alpha = 1.0 - smoothstep(-0.006, 0.0, d);
       vec2 tuv = (uv - 0.5) * uCover + 0.5;
-      vec3 col = texture2D(uTex, tuv).rgb;
-      col = mix(vec3(0.13), col, uLoaded);
+      vec4 tc = texture2D(uTex, tuv);               // premultiplicado: el producto ya trae su transparencia
       float depth = clamp((vZ + uRad) / (2.0 * uRad), 0.0, 1.0);
-      float shade = mix(0.16, 1.0, smoothstep(0.05, 0.95, depth));
-      if (!gl_FrontFacing) shade *= 0.5;
-      col *= shade;
-      // brillo especular suave que recorre la tarjeta
-      float sheen = smoothstep(0.35, 0.0, abs(vUv.x - 0.5 + (depth - 0.75) * 1.6)) * 0.08 * depth;
-      col += sheen;
-      float a = alpha * mix(0.55, 1.0, depth);
-      gl_FragColor = vec4(col * a, a);
+      float shade = mix(0.14, 1.0, smoothstep(0.05, 0.95, depth));
+      if (!gl_FrontFacing) shade *= 0.45;
+      // brillo suave que recorre el producto al pasar por delante
+      float sheen = smoothstep(0.35, 0.0, abs(vUv.x - 0.5 + (depth - 0.75) * 1.6)) * 0.07 * depth;
+      float k = alpha * uLoaded * mix(0.35, 1.0, depth);
+      gl_FragColor = vec4((tc.rgb * shade + sheen * tc.a) * k, tc.a * k);
     }`;
 
   function compile(type, src) {
@@ -118,70 +118,110 @@
   gl.enable(gl.BLEND);
   gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
   gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+  gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, true);
 
   /* ---------- Texturas ---------- */
   const planeAspect = W / H;
 
-  // Coloca el producto en una tarjeta 4:5: detecta dónde está la prenda
-  // (quita el margen vacío de la foto), la centra y rellena con su color de fondo.
+  // Prepara cada producto para flotar en el anillo, sin tarjeta:
+  // - PNG/WebP con transparencia: se usa tal cual.
+  // - Foto con fondo liso (blanco, gris): se quita el fondo desde los bordes.
+  // Después se recorta al producto, se centra y se añade un reflejo en el suelo.
   function fitImage(img) {
     try {
       const iw = img.naturalWidth, ih = img.naturalHeight;
-      // 1) Analizar una copia pequeña
-      const k = Math.min(1, 220 / Math.max(iw, ih));
-      const aw = Math.max(1, Math.round(iw * k)), ah = Math.max(1, Math.round(ih * k));
-      const a = document.createElement('canvas'); a.width = aw; a.height = ah;
+      // 1) Trabajar a tamaño moderado
+      const k = Math.min(1, 900 / Math.max(iw, ih));
+      const w = Math.max(1, Math.round(iw * k)), h = Math.max(1, Math.round(ih * k));
+      const a = document.createElement('canvas'); a.width = w; a.height = h;
       const ax = a.getContext('2d', { willReadFrequently: true });
-      ax.drawImage(img, 0, 0, aw, ah);
-      const d = ax.getImageData(0, 0, aw, ah).data;
-      const px = (x, y) => (y * aw + x) * 4;
-      // color de fondo = media de las esquinas opacas
-      let r = 0, g = 0, b = 0, n = 0;
-      [[1, 1], [aw - 2, 1], [1, ah - 2], [aw - 2, ah - 2]].forEach(([x, y]) => {
-        const i = px(Math.max(0, x), Math.max(0, y));
-        if (d[i + 3] > 200) { r += d[i]; g += d[i + 1]; b += d[i + 2]; n++; }
-      });
-      const bg = n ? [r / n, g / n, b / n] : [243, 243, 241];
-      // 2) Caja del producto: píxeles que se separan del fondo
-      let x0 = aw, y0 = ah, x1 = -1, y1 = -1;
-      for (let y = 0; y < ah; y++) for (let x = 0; x < aw; x++) {
-        const i = px(x, y);
-        const diff = d[i + 3] < 40 ? 0 : Math.abs(d[i] - bg[0]) + Math.abs(d[i + 1] - bg[1]) + Math.abs(d[i + 2] - bg[2]);
-        if (diff > 36) { if (x < x0) x0 = x; if (x > x1) x1 = x; if (y < y0) y0 = y; if (y > y1) y1 = y; }
+      ax.drawImage(img, 0, 0, w, h);
+      const id = ax.getImageData(0, 0, w, h);
+      const d = id.data;
+      const at = (x, y) => (y * w + x) * 4;
+
+      // 2) ¿Ya trae transparencia?
+      let transparent = 0;
+      [[0, 0], [w - 1, 0], [0, h - 1], [w - 1, h - 1]].forEach(([x, y]) => { if (d[at(x, y) + 3] < 40) transparent++; });
+
+      if (transparent < 2 && removeBg) {
+        // color de fondo = media del borde
+        let r = 0, g = 0, b = 0, n = 0;
+        for (let x = 0; x < w; x += 4) for (const y of [0, h - 1]) { const i = at(x, y); r += d[i]; g += d[i + 1]; b += d[i + 2]; n++; }
+        for (let y = 0; y < h; y += 4) for (const x of [0, w - 1]) { const i = at(x, y); r += d[i]; g += d[i + 1]; b += d[i + 2]; n++; }
+        const bg = [r / n, g / n, b / n];
+        const diff = (i) => Math.abs(d[i] - bg[0]) + Math.abs(d[i + 1] - bg[1]) + Math.abs(d[i + 2] - bg[2]);
+        // relleno desde los bordes: solo se borra el fondo conectado con el exterior,
+        // así los blancos dentro de la prenda (suelas, logos) se conservan
+        const T0 = 14, T1 = 46;
+        const seen = new Uint8Array(w * h);
+        const stack = [];
+        for (let x = 0; x < w; x++) { stack.push(x, 0, x, h - 1); }
+        for (let y = 0; y < h; y++) { stack.push(0, y, w - 1, y); }
+        while (stack.length) {
+          const y = stack.pop(), x = stack.pop();
+          const p = y * w + x;
+          if (seen[p]) continue;
+          seen[p] = 1;
+          const i = p * 4, df = diff(i);
+          if (df >= T1) continue;
+          d[i + 3] = df <= T0 ? 0 : Math.round(d[i + 3] * (df - T0) / (T1 - T0));
+          if (x > 0) stack.push(x - 1, y);
+          if (x < w - 1) stack.push(x + 1, y);
+          if (y > 0) stack.push(x, y - 1);
+          if (y < h - 1) stack.push(x, y + 1);
+        }
+        // limpiar halo: 2 pasadas sobre el contorno, quitando píxeles claros pegados al fondo
+        for (let pass = 0; pass < 2; pass++) {
+          const out = new Uint8Array(w * h);
+          for (let p = 0; p < w * h; p++) out[p] = d[p * 4 + 3] < 128 ? 1 : 0;
+          for (let y = 1; y < h - 1; y++) for (let x = 1; x < w - 1; x++) {
+            const p = y * w + x;
+            if (out[p] || !(out[p - 1] || out[p + 1] || out[p - w] || out[p + w])) continue;
+            const i = p * 4, df = diff(i);
+            if (df < 140) d[i + 3] = Math.round(d[i + 3] * Math.max(0, (df - T1) / (140 - T1)));
+          }
+        }
+        // quitar el color del fondo mezclado en los bordes semitransparentes
+        for (let p = 0; p < w * h; p++) {
+          const i = p * 4, al = d[i + 3] / 255;
+          if (al > 0.02 && al < 0.98) for (let c = 0; c < 3; c++) d[i + c] = Math.max(0, Math.min(255, (d[i + c] - bg[c] * (1 - al)) / al));
+        }
+        ax.putImageData(id, 0, 0);
       }
-      let sx = 0, sy = 0, sw = iw, sh = ih;
-      if (x1 > x0 && y1 > y0 && (x1 - x0) * (y1 - y0) > aw * ah * 0.02) {
-        sx = Math.max(0, (x0 - 1) / k); sy = Math.max(0, (y0 - 1) / k);
-        sw = Math.min(iw - sx, (x1 - x0 + 3) / k); sh = Math.min(ih - sy, (y1 - y0 + 3) / k);
+
+      // 3) Caja del producto según la transparencia
+      let x0 = w, y0 = h, x1 = -1, y1 = -1;
+      for (let y = 0; y < h; y += 2) for (let x = 0; x < w; x += 2) {
+        if (d[at(x, y) + 3] > 24) { if (x < x0) x0 = x; if (x > x1) x1 = x; if (y < y0) y0 = y; if (y > y1) y1 = y; }
       }
-      // 3) Componer la tarjeta
+      if (x1 <= x0 || y1 <= y0) return null;
+      const sx = Math.max(0, x0 - 2), sy = Math.max(0, y0 - 2);
+      const sw = Math.min(w - sx, x1 - x0 + 5), sh = Math.min(h - sy, y1 - y0 + 5);
+
+      // 4) Componer: producto arriba, reflejo abajo, fondo transparente
       const TW = 640, TH = Math.round(TW / planeAspect);
       const cv = document.createElement('canvas'); cv.width = TW; cv.height = TH;
       const x = cv.getContext('2d');
-      x.fillStyle = `rgb(${bg.map(Math.round).join(',')})`;
-      x.fillRect(0, 0, TW, TH);
-      const pa = sw / sh;
-      const pad = pa > 1.3 ? 0.07 : 0.11;            // zapatillas y gorras apaisadas: menos margen lateral
-      const sc = Math.min((TW * (1 - pad * 2)) / sw, (TH * (1 - pad * 2.4)) / sh);
+      const areaH = TH * 0.74, pad = 0.06;
+      const sc = Math.min((TW * (1 - pad * 2)) / sw, (areaH * (1 - pad * 2)) / sh);
       const dw = sw * sc, dh = sh * sc;
-      // sombra de suelo suave
-      x.save(); x.filter = 'blur(14px)'; x.fillStyle = 'rgba(0,0,0,0.13)';
-      x.beginPath(); x.ellipse(TW / 2, (TH + dh) / 2 + 6, dw * 0.42, 12, 0, 0, Math.PI * 2); x.fill(); x.restore();
-      // la foto se funde con el fondo en sus bordes (evita el "recuadro" si el fondo no es liso)
-      const t = document.createElement('canvas'); t.width = Math.ceil(dw); t.height = Math.ceil(dh);
-      const tx = t.getContext('2d');
-      tx.drawImage(img, sx, sy, sw, sh, 0, 0, dw, dh);
-      tx.globalCompositeOperation = 'destination-in';
-      const f = Math.max(6, Math.min(dw, dh) * 0.05);
-      const gh = tx.createLinearGradient(0, 0, dw, 0);
-      gh.addColorStop(0, 'rgba(0,0,0,0)'); gh.addColorStop(f / dw, '#000'); gh.addColorStop(1 - f / dw, '#000'); gh.addColorStop(1, 'rgba(0,0,0,0)');
-      tx.fillStyle = gh; tx.fillRect(0, 0, dw, dh);
-      const gv = tx.createLinearGradient(0, 0, 0, dh);
-      gv.addColorStop(0, 'rgba(0,0,0,0)'); gv.addColorStop(f / dh, '#000'); gv.addColorStop(1 - f / dh, '#000'); gv.addColorStop(1, 'rgba(0,0,0,0)');
-      tx.fillStyle = gv; tx.fillRect(0, 0, dw, dh);
-      x.drawImage(t, (TW - dw) / 2, (TH - dh) / 2);
+      const dx = (TW - dw) / 2, dy = areaH - dh - areaH * pad * 0.6;  // apoyado en el "suelo"
+      // reflejo
+      x.save();
+      x.translate(0, (dy + dh) * 2 + 4); x.scale(1, -1);
+      x.globalAlpha = 0.22;
+      x.drawImage(a, sx, sy, sw, sh, dx, dy, dw, dh);
+      x.restore();
+      const fade = x.createLinearGradient(0, dy + dh, 0, dy + dh + dh * 0.45);
+      fade.addColorStop(0, 'rgba(0,0,0,0)'); fade.addColorStop(1, 'rgba(0,0,0,1)');
+      x.save(); x.globalCompositeOperation = 'destination-out';
+      x.fillStyle = fade; x.fillRect(0, dy + dh, TW, TH - dy - dh);
+      x.restore();
+      // producto
+      x.drawImage(a, sx, sy, sw, sh, dx, dy, dw, dh);
       return cv;
-    } catch (e) { return null; } // imagen sin CORS: se usa recorte "cover"
+    } catch (e) { return null; } // imagen sin CORS: se usa la foto tal cual
   }
 
   const cards = items.map((it, i) => {

@@ -105,11 +105,11 @@
   const heroData = document.querySelector('[data-hero-items]');
   // Fotos reales del anillo (precios de ejemplo)
   const HERO = [
-    { img: 'img/burberry-check-chaqueta.jpg', title: 'Burberry Chaqueta Check con capucha', price: 690 },
-    { img: 'img/dior-oblique-knit-down.jpg', title: 'Dior Chaqueta Oblique punto y plumas', price: 1450, compare: 1690 },
-    { img: 'img/gucci-rhyton.jpg', title: 'Gucci Rhyton GG Supreme', price: 590 },
-    { img: 'img/dior-oblique-puffer.jpg', title: 'Dior Plumífero Oblique', price: 1890 },
-    { img: 'img/burberry-check-gorra.jpg', title: 'Burberry Gorra Check', price: 320 },
+    { img: 'img/burberry-check-chaqueta.webp', title: 'Burberry Chaqueta Check con capucha', price: 690 },
+    { img: 'img/dior-oblique-knit-down.webp', title: 'Dior Chaqueta Oblique punto y plumas', price: 1450, compare: 1690 },
+    { img: 'img/gucci-rhyton.webp', title: 'Gucci Rhyton GG Supreme', price: 590 },
+    { img: 'img/dior-oblique-puffer.webp', title: 'Dior Plumífero Oblique', price: 1890 },
+    { img: 'img/burberry-check-gorra.webp', title: 'Burberry Gorra Check', price: 320 },
   ];
   if (heroData) heroData.textContent = JSON.stringify(HERO.map((it) => ({
     img: it.img, title: it.title, url: 'producto.html', price: fmt(it.price),

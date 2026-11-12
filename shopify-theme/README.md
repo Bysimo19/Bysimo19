@@ -13,6 +13,11 @@ Tema Online Store 2.0, sin dependencias. Pasa `theme-check` con 0 errores y 0 av
    - **Cabecera**: menú `main-menu`. **Pie**: menús por columna.
 4. Configuración del tema → Carrito → umbral de envío gratis (100 € por defecto).
 
+### Fotos del anillo 3D
+Los productos flotan sin fondo sobre el hero oscuro, con reflejo en el suelo.
+- **Mejor resultado:** sube la foto principal en PNG sin fondo. En el admin de Shopify: abre la imagen → Editar → *Quitar fondo*.
+- **Fotos con fondo blanco o gris liso:** el tema quita el fondo solo (ajuste *Quitar fondo liso* en la sección Hero 3D). Con fondos con degradado o sombras fuertes puede quedar un borde fino.
+
 ### Etiquetas de producto que usa el tema
 - `nuevo` → badge "Nuevo".
 - `top` → badge "Top ventas".
