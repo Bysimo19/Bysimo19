@@ -76,7 +76,7 @@
     const update = () => {
       const y = scrollY;
       const threshold = overlay ? Math.max(80, innerHeight * 0.85) : 120;
-      header.classList.toggle('is-solid', !overlay || y > threshold - 80);
+      header.classList.toggle('is-solid', !overlay || y > 40);
       header.classList.toggle('is-hidden', y > threshold && y > lastY && !$('.drawer.is-open'));
       lastY = y; ticking = false;
     };
@@ -266,7 +266,7 @@
       if (stockEl) {
         const q = v.inventory_quantity;
         stockEl.className = 'pdp__stock' + (!v.available ? ' is-out' : (typeof q === 'number' && q > 0 && q <= 3 ? ' is-low' : ''));
-        stockEl.textContent = !v.available ? 'Agotado en esta talla' : (typeof q === 'number' && q > 0 && q <= 3 ? `Últimas ${q} unidades` : 'En stock · envío en 24/48h');
+        stockEl.textContent = !v.available ? 'Agotado en esta talla' : (typeof q === 'number' && q > 0 && q <= 3 ? `Últimas ${q} unidades` : 'En stock · envío en 1–2 semanas');
       }
       const url = new URL(location.href); url.searchParams.set('variant', v.id);
       history.replaceState(null, '', url);

@@ -36,8 +36,8 @@
         "s3": {
           "type": "stat",
           "settings": {
-            "value": "24h",
-            "label": "Envío península"
+            "value": "1–2 sem.",
+            "label": "Plazo de envío"
           }
         }
       },
@@ -61,7 +61,7 @@
       "type": "marquee",
       "settings": {
         "style": "dark",
-        "text": "Envío 24/48h | 100% original | Devolución 14 días | Pago a plazos"
+        "text": "Envío 1–2 semanas | 100% original | Devolución 14 días | Pago a plazos"
       }
     },
     "trust": {
@@ -71,7 +71,7 @@
           "type": "item",
           "settings": {
             "icon": "truck",
-            "title": "Envío 24/48h",
+            "title": "Envío 1–2 semanas",
             "text": "Gratis desde 100 € en península."
           }
         },

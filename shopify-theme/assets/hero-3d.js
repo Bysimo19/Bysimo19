@@ -322,6 +322,9 @@
   function onScroll() {
     const r = root.getBoundingClientRect();
     scrollP = Math.min(1, Math.max(0, -r.top / r.height));
+    // al bajar, el anillo se desvanece antes de llegar a la cabecera
+    if (scrollP > 0) { canvas.style.transition = 'opacity .12s linear'; canvas.style.opacity = String(Math.max(0, 1 - scrollP * 1.8)); }
+    else if (canvas.style.opacity) { canvas.style.opacity = ''; }
     wake();
   }
   window.addEventListener('scroll', onScroll, { passive: true });
@@ -365,9 +368,9 @@
 
     // cámara: entra desde arriba y se inclina al hacer scroll
     const far = aspect < 1 ? Math.max(8.6, R + (W / 0.55) / (0.849 * aspect)) : 10.4;
-    const dist = far + (1 - ei) * 6 - scrollP * 2.2;
-    const tilt = 0.13 + (1 - ei) * 0.5 + scrollP * 0.35 + smy * 0.04;
-    const camY = -0.15 + scrollP * 0.6;
+    const dist = far + (1 - ei) * 6 + scrollP * 4;
+    const tilt = 0.13 + (1 - ei) * 0.5 + scrollP * 0.12 + smy * 0.04;
+    const camY = -0.15 - scrollP * 1.4;
     let view = mul(trans(0, camY, -dist), rotX(tilt));
     view = mul(view, rotY(smx * 0.12));
     view = mul(rotZ(-0.05 + smx * 0.02), view);

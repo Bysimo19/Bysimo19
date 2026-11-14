@@ -207,7 +207,7 @@
         "type": "text",
         "id": "shipping_short",
         "label": "Texto corto de envío (ficha)",
-        "default": "Envío 24/48h"
+        "default": "Envío 1–2 semanas"
       }
     ]
   },
