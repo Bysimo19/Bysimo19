@@ -136,6 +136,10 @@
     { t: 'Plumífero Lawrence', img: 'cg-plumiferos-navy', img2: 'cg-plumifero-navy', p: 745, colors: 2, brand: 'Canada Goose' },
     { t: 'Plumífero con capucha Crofton Hoody', img: 'cg-plumiferos-capucha', img2: 'cg-plumifero-capucha-negro', p: 850, c: 950, colors: 2, brand: 'Canada Goose' },
     { t: 'Plumífero Everett brillo', img: 'cg-plumiferos-brillo', img2: 'cg-plumifero-brillo-gris', p: 795, colors: 2, tag: 'new', brand: 'Canada Goose' },
+    { t: 'Bomber Chilliwack con pelo', img: 'cg-bomber-pelo', img2: 'cg-bomber-azul', p: 1150, colors: 6, tag: 'top', brand: 'Canada Goose' },
+    { t: 'Plumífero corto Cypress', img: 'cg-cropped-colores', img2: 'cg-cropped-rosa', p: 650, colors: 4, tag: 'new', brand: 'Canada Goose' },
+    { t: 'Parka Expedition × OVO', img: 'cg-ovo-parka', img2: 'cg-ovo-negro', p: 1390, colors: 2, brand: 'Canada Goose' },
+    { t: 'Abrigo largo Byward Black Label', img: 'cg-abrigo-largo', img2: 'cg-abrigo-largo-z', p: 1095, c: 1250, colors: 1, brand: 'Canada Goose' },
     { t: 'Pantalón Huron Fleece', img: 'cg-pantalones', img2: 'cg-pantalon-negro', p: 225, colors: 2, brand: 'Canada Goose' },
   ];
   const render = (list) => list.map((it, i) => {

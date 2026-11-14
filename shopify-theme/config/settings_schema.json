@@ -77,7 +77,7 @@
         "type": "textarea",
         "id": "subcategories",
         "label": "Subcategorías (una por línea, en este orden)",
-        "default": "Zapatillas\nGorros\nSudaderas\nChaquetas\nPlumíferos\nSobrecamisas\nCamisetas\nPolos\nPantalones\nPantalones cortos\nTejanos / Cargo\nBolsos\nAccesorios"
+        "default": "Zapatillas\nGorros\nSudaderas\nChaquetas\nPlumíferos\nParkas\nAbrigos largos\nChalecos\nSobrecamisas\nCamisetas\nPolos\nPantalones\nPantalones cortos\nTejanos / Cargo\nBolsos\nAccesorios"
       },
       {
         "type": "checkbox",
