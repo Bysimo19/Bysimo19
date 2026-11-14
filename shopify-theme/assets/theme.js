@@ -312,6 +312,64 @@
   }));
   try { const c = localStorage.getItem('cols'); if (c && innerWidth > 860) $(`[data-cols="${c}"]`)?.click(); } catch (e) {}
 
+  /* ---------- Mega menú de marcas ---------- */
+  $$('[data-mega]').forEach((li) => {
+    const trigger = $('.mega-trigger', li);
+    let backdrop = $('.mega-backdrop');
+    if (!backdrop) { backdrop = document.createElement('div'); backdrop.className = 'mega-backdrop'; document.body.appendChild(backdrop); }
+    const show = (i) => {
+      $$('[data-mega-brand]', li).forEach((a) => a.classList.toggle('is-active', a.dataset.megaBrand === String(i)));
+      $$('[data-mega-panel]', li).forEach((p) => { p.hidden = p.dataset.megaPanel !== String(i); });
+    };
+    const setOpen = (on) => {
+      li.classList.toggle('is-open', on);
+      trigger.setAttribute('aria-expanded', on);
+      document.body.classList.toggle('mega-on', on);
+      header?.classList.add('is-solid');
+    };
+    let t;
+    li.addEventListener('mouseenter', () => { clearTimeout(t); li.classList.remove('is-closing'); setOpen(true); });
+    li.addEventListener('mouseleave', () => { t = setTimeout(() => setOpen(false), 120); });
+    li.addEventListener('focusin', () => setOpen(true));
+    li.addEventListener('focusout', (e) => { if (!li.contains(e.relatedTarget)) setOpen(false); });
+    $$('[data-mega-brand]', li).forEach((a) => {
+      a.addEventListener('mouseenter', () => show(a.dataset.megaBrand));
+      a.addEventListener('focus', () => show(a.dataset.megaBrand));
+    });
+    // táctil: primer toque abre, segundo navega
+    trigger.addEventListener('click', (e) => {
+      if (matchMedia('(hover: none)').matches && !li.classList.contains('is-open')) { e.preventDefault(); setOpen(true); }
+    });
+    backdrop.addEventListener('click', () => { li.classList.add('is-closing'); setOpen(false); });
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && li.classList.contains('is-open')) { li.classList.add('is-closing'); setOpen(false); trigger.focus(); } });
+  });
+
+  /* ---------- Portada: pestañas de marcas ---------- */
+  $$('[data-brand-hub]').forEach((hub) => {
+    const tabs = $$('[data-bh-tab]', hub), ink = $('.bh__ink', hub);
+    const moveInk = (b) => { if (ink && b) { ink.style.width = b.offsetWidth + 'px'; ink.style.transform = `translateX(${b.offsetLeft}px)`; } };
+    const select = (i, focus) => {
+      tabs.forEach((b) => b.setAttribute('aria-selected', b.dataset.bhTab === String(i)));
+      $$('[data-bh-panel]', hub).forEach((p) => {
+        const on = p.dataset.bhPanel === String(i);
+        if (on && p.hidden) { p.hidden = false; p.classList.remove('is-entering'); void p.offsetWidth; p.classList.add('is-entering'); $$('.reveal', p).forEach((r) => r.classList.add('is-in')); }
+        else if (!on) p.hidden = true;
+      });
+      const b = tabs.find((x) => x.dataset.bhTab === String(i));
+      moveInk(b); if (focus) b.focus();
+    };
+    tabs.forEach((b, k) => {
+      b.addEventListener('click', () => select(b.dataset.bhTab));
+      b.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') { e.preventDefault(); const n = tabs[(k + (e.key === 'ArrowRight' ? 1 : tabs.length - 1)) % tabs.length]; select(n.dataset.bhTab, true); }
+      });
+    });
+    const first = tabs.find((b) => b.getAttribute('aria-selected') === 'true');
+    requestAnimationFrame(() => moveInk(first));
+    addEventListener('resize', () => moveInk(tabs.find((b) => b.getAttribute('aria-selected') === 'true')));
+    document.fonts?.ready.then(() => moveInk(tabs.find((b) => b.getAttribute('aria-selected') === 'true')));
+  });
+
   /* ---------- Recomendados (carga diferida) ---------- */
   $$('[data-recs]').forEach((el) => {
     const load = async () => {

@@ -10,56 +10,230 @@
   {
     "name": "Colores",
     "settings": [
-      { "type": "color", "id": "color_bg", "label": "Fondo", "default": "#F3F2EE" },
-      { "type": "color", "id": "color_fg", "label": "Texto", "default": "#0D0D0D" },
-      { "type": "color", "id": "color_muted", "label": "Texto secundario", "default": "#6B6A66" },
-      { "type": "color", "id": "color_card", "label": "Fondo de foto de producto", "default": "#FFFFFF" },
-      { "type": "color", "id": "color_accent", "label": "Acento", "default": "#C8FF2E" },
-      { "type": "color", "id": "color_accent_fg", "label": "Texto sobre acento", "default": "#0D0D0D" },
-      { "type": "color", "id": "color_hero_bg", "label": "Fondo hero 3D", "default": "#0A0A0B" },
-      { "type": "color", "id": "color_hero_fg", "label": "Texto hero 3D", "default": "#F3F2EE" },
-      { "type": "color", "id": "color_sale", "label": "Rebajas", "default": "#E5391F" }
+      {
+        "type": "color",
+        "id": "color_bg",
+        "label": "Fondo",
+        "default": "#F3F2EE"
+      },
+      {
+        "type": "color",
+        "id": "color_fg",
+        "label": "Texto",
+        "default": "#0D0D0D"
+      },
+      {
+        "type": "color",
+        "id": "color_muted",
+        "label": "Texto secundario",
+        "default": "#6B6A66"
+      },
+      {
+        "type": "color",
+        "id": "color_card",
+        "label": "Fondo de foto de producto",
+        "default": "#FFFFFF"
+      },
+      {
+        "type": "color",
+        "id": "color_accent",
+        "label": "Acento",
+        "default": "#C8FF2E"
+      },
+      {
+        "type": "color",
+        "id": "color_accent_fg",
+        "label": "Texto sobre acento",
+        "default": "#0D0D0D"
+      },
+      {
+        "type": "color",
+        "id": "color_hero_bg",
+        "label": "Fondo hero 3D",
+        "default": "#0A0A0B"
+      },
+      {
+        "type": "color",
+        "id": "color_hero_fg",
+        "label": "Texto hero 3D",
+        "default": "#F3F2EE"
+      },
+      {
+        "type": "color",
+        "id": "color_sale",
+        "label": "Rebajas",
+        "default": "#E5391F"
+      }
+    ]
+  },
+  {
+    "name": "Marcas y categorías",
+    "settings": [
+      {
+        "type": "paragraph",
+        "content": "Crea una colección por marca (ej. Stone Island) y etiqueta cada producto con su subcategoría (ej. Gorros). El tema genera solo los enlaces /collections/stone-island/gorros."
+      },
+      {
+        "type": "textarea",
+        "id": "subcategories",
+        "label": "Subcategorías (una por línea, en este orden)",
+        "default": "Zapatillas\nGorros\nSudaderas\nChaquetas\nPlumíferos\nSobrecamisas\nCamisetas\nPolos\nPantalones\nPantalones cortos\nTejanos / Cargo\nBolsos\nAccesorios"
+      },
+      {
+        "type": "checkbox",
+        "id": "subcategories_hide_empty",
+        "label": "Ocultar subcategorías sin productos",
+        "default": true
+      }
     ]
   },
   {
     "name": "Tipografía",
     "settings": [
-      { "type": "font_picker", "id": "font_heading", "label": "Titulares", "default": "inter_n7" },
-      { "type": "select", "id": "heading_weight", "label": "Grosor titulares", "options": [ { "value": "500", "label": "Medio" }, { "value": "700", "label": "Negrita" }, { "value": "800", "label": "Extra" }, { "value": "900", "label": "Black" } ], "default": "700" },
-      { "type": "font_picker", "id": "font_body", "label": "Texto", "default": "inter_n4" }
+      {
+        "type": "font_picker",
+        "id": "font_heading",
+        "label": "Titulares",
+        "default": "inter_n7"
+      },
+      {
+        "type": "select",
+        "id": "heading_weight",
+        "label": "Grosor titulares",
+        "options": [
+          {
+            "value": "500",
+            "label": "Medio"
+          },
+          {
+            "value": "700",
+            "label": "Negrita"
+          },
+          {
+            "value": "800",
+            "label": "Extra"
+          },
+          {
+            "value": "900",
+            "label": "Black"
+          }
+        ],
+        "default": "700"
+      },
+      {
+        "type": "font_picker",
+        "id": "font_body",
+        "label": "Texto",
+        "default": "inter_n4"
+      }
     ]
   },
   {
     "name": "Diseño",
     "settings": [
-      { "type": "range", "id": "radius", "label": "Radio de esquinas", "min": 0, "max": 28, "step": 2, "unit": "px", "default": 14 },
-      { "type": "checkbox", "id": "header_overlay_home", "label": "Cabecera transparente sobre el hero de portada", "default": true },
-      { "type": "image_picker", "id": "favicon", "label": "Favicon" }
+      {
+        "type": "range",
+        "id": "radius",
+        "label": "Radio de esquinas",
+        "min": 0,
+        "max": 28,
+        "step": 2,
+        "unit": "px",
+        "default": 14
+      },
+      {
+        "type": "checkbox",
+        "id": "header_overlay_home",
+        "label": "Cabecera transparente sobre el hero de portada",
+        "default": true
+      },
+      {
+        "type": "image_picker",
+        "id": "favicon",
+        "label": "Favicon"
+      }
     ]
   },
   {
     "name": "Tarjetas de producto",
     "settings": [
-      { "type": "checkbox", "id": "card_hover_image", "label": "Segunda foto al pasar el ratón", "default": true },
-      { "type": "checkbox", "id": "card_show_sizes", "label": "Mostrar tallas disponibles al pasar el ratón", "default": true },
-      { "type": "checkbox", "id": "card_show_vendor", "label": "Mostrar marca", "default": true }
+      {
+        "type": "checkbox",
+        "id": "card_hover_image",
+        "label": "Segunda foto al pasar el ratón",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "card_show_sizes",
+        "label": "Mostrar tallas disponibles al pasar el ratón",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "card_show_vendor",
+        "label": "Mostrar marca",
+        "default": true
+      }
     ]
   },
   {
     "name": "Carrito",
     "settings": [
-      { "type": "select", "id": "cart_type", "label": "Al añadir al carrito", "options": [ { "value": "drawer", "label": "Abrir panel lateral" }, { "value": "page", "label": "Ir a la página del carrito" } ], "default": "drawer" },
-      { "type": "number", "id": "free_shipping_threshold", "label": "Envío gratis desde (€)", "info": "0 para ocultar la barra de progreso", "default": 100 },
-      { "type": "text", "id": "shipping_short", "label": "Texto corto de envío (ficha)", "default": "Envío 24/48h" }
+      {
+        "type": "select",
+        "id": "cart_type",
+        "label": "Al añadir al carrito",
+        "options": [
+          {
+            "value": "drawer",
+            "label": "Abrir panel lateral"
+          },
+          {
+            "value": "page",
+            "label": "Ir a la página del carrito"
+          }
+        ],
+        "default": "drawer"
+      },
+      {
+        "type": "number",
+        "id": "free_shipping_threshold",
+        "label": "Envío gratis desde (€)",
+        "info": "0 para ocultar la barra de progreso",
+        "default": 100
+      },
+      {
+        "type": "text",
+        "id": "shipping_short",
+        "label": "Texto corto de envío (ficha)",
+        "default": "Envío 24/48h"
+      }
     ]
   },
   {
     "name": "Redes sociales",
     "settings": [
-      { "type": "url", "id": "social_instagram", "label": "Instagram" },
-      { "type": "url", "id": "social_tiktok", "label": "TikTok" },
-      { "type": "url", "id": "social_x", "label": "X" },
-      { "type": "url", "id": "social_youtube", "label": "YouTube" }
+      {
+        "type": "url",
+        "id": "social_instagram",
+        "label": "Instagram"
+      },
+      {
+        "type": "url",
+        "id": "social_tiktok",
+        "label": "TikTok"
+      },
+      {
+        "type": "url",
+        "id": "social_x",
+        "label": "X"
+      },
+      {
+        "type": "url",
+        "id": "social_youtube",
+        "label": "YouTube"
+      }
     ]
   }
 ]

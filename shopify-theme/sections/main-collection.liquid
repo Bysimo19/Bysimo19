@@ -2,11 +2,38 @@
   Página de categoría: sin 3D, sin librerías. Render 100% servidor + filtros nativos de Shopify.
 {%- endcomment -%}
 {%- paginate collection.products by section.settings.per_page -%}
-<div class="wrap coll-hero">
-  <nav class="crumbs" aria-label="Migas"><a href="{{ routes.root_url }}">Inicio</a><span>/</span><span>{{ collection.title }}</span></nav>
-  <h1 class="h1">{{ collection.title }}<sup class="mono">{{ collection.products_count }}</sup></h1>
-  {%- if collection.description != blank and section.settings.show_description -%}<div class="rte muted">{{ collection.description }}</div>{%- endif -%}
-</div>
+{%- liquid
+  assign current_name = ''
+  if current_tags
+    assign current_name = current_tags.first
+  endif
+-%}
+{%- if collection.image and section.settings.brand_banner -%}
+  <section class="brand-banner">
+    {{ collection.image | image_url: width: 2000 | image_tag: loading: 'eager', fetchpriority: 'high', widths: '800,1200,1600,2000', sizes: '100vw', class: 'brand-banner__img', alt: collection.title }}
+    <div class="wrap brand-banner__body">
+      <nav class="crumbs" aria-label="Migas"><a href="{{ routes.root_url }}">Inicio</a><span>/</span><a href="{{ routes.collections_url }}">Marcas</a><span>/</span><span>{{ collection.title }}</span></nav>
+      <h1 class="brand-banner__title">{{ collection.title }}</h1>
+      <div class="brand-banner__meta">
+        {%- if collection.description != blank and section.settings.show_description -%}<div class="rte">{{ collection.description }}</div>{%- endif -%}
+        <span class="mono">{{ collection.products_count }} piezas</span>
+      </div>
+    </div>
+  </section>
+{%- else -%}
+  <div class="wrap coll-hero">
+    <nav class="crumbs" aria-label="Migas"><a href="{{ routes.root_url }}">Inicio</a><span>/</span>{% if current_name != '' %}<a href="{{ collection.url }}">{{ collection.title }}</a><span>/</span><span>{{ current_name }}</span>{% else %}<span>{{ collection.title }}</span>{% endif %}</nav>
+    <h1 class="h1">{{ collection.title }}{% if current_name != '' %} <span class="coll-hero__sub">{{ current_name }}</span>{% endif %}<sup class="mono">{{ collection.products_count }}</sup></h1>
+    {%- if collection.description != blank and section.settings.show_description -%}<div class="rte muted">{{ collection.description }}</div>{%- endif -%}
+  </div>
+{%- endif -%}
+
+{%- if section.settings.show_subcats -%}
+  <nav class="wrap chips" aria-label="Categorías de {{ collection.title }}">
+    <a class="chip{% if current_name == '' %} is-active{% endif %}" href="{{ collection.url }}"{% if current_name == '' %} aria-current="page"{% endif %}>Todo</a>
+    {% render 'brand-subcats', collection: collection, mode: 'chips' %}
+  </nav>
+{%- endif -%}
 
 <div class="toolbar">
   <form class="wrap" data-filters method="get" action="{{ collection.url }}">
@@ -109,7 +136,9 @@
   "name": "Colección",
   "settings": [
     { "type": "range", "id": "per_page", "label": "Productos por página", "min": 12, "max": 48, "step": 4, "default": 24 },
-    { "type": "checkbox", "id": "show_description", "label": "Mostrar descripción", "default": true }
+    { "type": "checkbox", "id": "show_description", "label": "Mostrar descripción", "default": true },
+    { "type": "checkbox", "id": "brand_banner", "label": "Cabecera de marca a pantalla completa si la colección tiene imagen", "default": true },
+    { "type": "checkbox", "id": "show_subcats", "label": "Mostrar pestañas de subcategorías", "default": true }
   ]
 }
 {% endschema %}

@@ -1,0 +1,82 @@
+{%- comment -%}
+  Portada → "Compra por marca". Un bloque por marca (su colección).
+  Las subcategorías salen de Ajustes del tema → Marcas y categorías + etiquetas de producto.
+{%- endcomment -%}
+<section class="section bh" data-brand-hub>
+  <div class="wrap">
+    <div class="bh__head">
+      <div class="bh__title">
+        {%- if section.settings.kicker != blank -%}<span class="kicker">{{ section.settings.kicker }}</span>{%- endif -%}
+        <h2 class="h1"><span class="split-line"><span>{{ section.settings.title }}</span></span></h2>
+      </div>
+      {%- if section.blocks.size > 1 -%}
+        <div class="bh__tabs" role="tablist" aria-label="Marcas">
+          {%- for block in section.blocks -%}
+            {%- assign col = block.settings.collection -%}
+            <button type="button" role="tab" id="bh-tab-{{ block.id }}" aria-controls="bh-panel-{{ block.id }}" aria-selected="{% if forloop.first %}true{% else %}false{% endif %}" data-bh-tab="{{ forloop.index0 }}" {{ block.shopify_attributes }}>
+              {{ block.settings.label | default: col.title | default: 'Marca' }}
+            </button>
+          {%- endfor -%}
+          <i class="bh__ink" aria-hidden="true"></i>
+        </div>
+      {%- endif -%}
+    </div>
+
+    {%- for block in section.blocks -%}
+      {%- liquid
+        assign col = block.settings.collection
+        assign label = block.settings.label | default: col.title | default: 'Marca'
+        assign img = block.settings.image | default: col.image | default: col.products.first.featured_image
+      -%}
+      <div class="bh__panel" role="tabpanel" id="bh-panel-{{ block.id }}" aria-labelledby="bh-tab-{{ block.id }}" data-bh-panel="{{ forloop.index0 }}"{% unless forloop.first %} hidden{% endunless %}>
+        <a class="bh__feature reveal" href="{{ col.url | default: '#' }}">
+          {%- if img -%}
+            {{ img | image_url: width: 1400 | image_tag: loading: 'lazy', widths: '500,800,1100,1400', sizes: '(min-width: 860px) 42vw, 100vw', alt: label }}
+          {%- else -%}
+            {{ 'collection-apparel-2' | placeholder_svg_tag }}
+          {%- endif -%}
+          <span class="bh__feature-body">
+            <span class="bh__feature-top">
+              <span class="kicker">{{ block.settings.tagline }}</span>
+              {%- if col.products_count > 0 -%}<span class="mono">{{ col.products_count }} piezas</span>{%- endif -%}
+            </span>
+            <span class="bh__brand">{{ label }}</span>
+            {%- if block.settings.text != blank -%}<span class="bh__text">{{ block.settings.text }}</span>{%- endif -%}
+            <span class="btn btn--light">Ver {{ label }} <span class="arrow">→</span></span>
+          </span>
+        </a>
+        <div class="bh__grid" data-stagger>
+          {%- if col != blank -%}
+            {% render 'brand-subcats', collection: col, mode: 'tiles', limit: section.settings.limit %}
+          {%- endif -%}
+        </div>
+      </div>
+    {%- endfor -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Compra por marca",
+  "max_blocks": 12,
+  "settings": [
+    { "type": "text", "id": "kicker", "label": "Etiqueta", "default": "Marcas" },
+    { "type": "text", "id": "title", "label": "Título", "default": "Compra por marca" },
+    { "type": "range", "id": "limit", "label": "Subcategorías por marca", "min": 3, "max": 12, "step": 1, "default": 9 }
+  ],
+  "blocks": [
+    {
+      "type": "brand",
+      "name": "Marca",
+      "settings": [
+        { "type": "collection", "id": "collection", "label": "Colección de la marca" },
+        { "type": "text", "id": "label", "label": "Nombre (opcional)" },
+        { "type": "text", "id": "tagline", "label": "Etiqueta", "default": "Nueva temporada" },
+        { "type": "textarea", "id": "text", "label": "Texto", "default": "Prendas técnicas, tintes en prenda y el parche de la brújula." },
+        { "type": "image_picker", "id": "image", "label": "Foto grande (opcional)" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "Compra por marca", "blocks": [ { "type": "brand" }, { "type": "brand" }, { "type": "brand" } ] }]
+}
+{% endschema %}

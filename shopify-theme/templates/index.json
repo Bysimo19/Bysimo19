@@ -1,44 +1,156 @@
 {
   "sections": {
-    "hero": { "type": "hero-3d", "settings": {} },
-    "marquee": { "type": "marquee", "settings": {} },
-    "new": { "type": "featured-collection", "settings": { "kicker": "Recién llegado", "title": "Novedades", "layout": "rail" } },
-    "cats": {
-      "type": "category-tiles",
-      "blocks": {
-        "c1": { "type": "category", "settings": { "label": "Zapatillas" } },
-        "c2": { "type": "category", "settings": { "label": "Sudaderas" } },
-        "c3": { "type": "category", "settings": { "label": "Camisetas" } },
-        "c4": { "type": "category", "settings": { "label": "Pantalones" } },
-        "c5": { "type": "category", "settings": { "label": "Accesorios" } }
-      },
-      "block_order": ["c1", "c2", "c3", "c4", "c5"],
+    "hero": {
+      "type": "hero-3d",
       "settings": {}
+    },
+    "marquee": {
+      "type": "marquee",
+      "settings": {}
+    },
+    "new": {
+      "type": "featured-collection",
+      "settings": {
+        "kicker": "Recién llegado",
+        "title": "Novedades",
+        "layout": "rail"
+      }
     },
     "editorial": {
       "type": "editorial",
       "blocks": {
-        "s1": { "type": "stat", "settings": { "value": "12k+", "label": "Pedidos enviados" } },
-        "s2": { "type": "stat", "settings": { "value": "4,9★", "label": "Valoración media" } },
-        "s3": { "type": "stat", "settings": { "value": "24h", "label": "Envío península" } }
+        "s1": {
+          "type": "stat",
+          "settings": {
+            "value": "12k+",
+            "label": "Pedidos enviados"
+          }
+        },
+        "s2": {
+          "type": "stat",
+          "settings": {
+            "value": "4,9★",
+            "label": "Valoración media"
+          }
+        },
+        "s3": {
+          "type": "stat",
+          "settings": {
+            "value": "24h",
+            "label": "Envío península"
+          }
+        }
       },
-      "block_order": ["s1", "s2", "s3"],
+      "block_order": [
+        "s1",
+        "s2",
+        "s3"
+      ],
       "settings": {}
     },
-    "best": { "type": "featured-collection", "settings": { "kicker": "Lo más vendido", "title": "Top ventas", "layout": "grid", "limit": 8 } },
-    "marquee2": { "type": "marquee", "settings": { "style": "dark", "text": "Envío 24/48h | 100% original | Devolución 14 días | Pago a plazos" } },
+    "best": {
+      "type": "featured-collection",
+      "settings": {
+        "kicker": "Lo más vendido",
+        "title": "Top ventas",
+        "layout": "grid",
+        "limit": 8
+      }
+    },
+    "marquee2": {
+      "type": "marquee",
+      "settings": {
+        "style": "dark",
+        "text": "Envío 24/48h | 100% original | Devolución 14 días | Pago a plazos"
+      }
+    },
     "trust": {
       "type": "trust-bar",
       "blocks": {
-        "t1": { "type": "item", "settings": { "icon": "truck", "title": "Envío 24/48h", "text": "Gratis desde 100 € en península." } },
-        "t2": { "type": "item", "settings": { "icon": "shield", "title": "100% auténtico", "text": "Verificación manual de cada par." } },
-        "t3": { "type": "item", "settings": { "icon": "return", "title": "Devolución 14 días", "text": "Sin preguntas, etiqueta incluida." } },
-        "t4": { "type": "item", "settings": { "icon": "lock", "title": "Pago seguro", "text": "Tarjeta, Bizum, PayPal y a plazos." } }
+        "t1": {
+          "type": "item",
+          "settings": {
+            "icon": "truck",
+            "title": "Envío 24/48h",
+            "text": "Gratis desde 100 € en península."
+          }
+        },
+        "t2": {
+          "type": "item",
+          "settings": {
+            "icon": "shield",
+            "title": "100% auténtico",
+            "text": "Verificación manual de cada par."
+          }
+        },
+        "t3": {
+          "type": "item",
+          "settings": {
+            "icon": "return",
+            "title": "Devolución 14 días",
+            "text": "Sin preguntas, etiqueta incluida."
+          }
+        },
+        "t4": {
+          "type": "item",
+          "settings": {
+            "icon": "lock",
+            "title": "Pago seguro",
+            "text": "Tarjeta, Bizum, PayPal y a plazos."
+          }
+        }
       },
-      "block_order": ["t1", "t2", "t3", "t4"],
+      "block_order": [
+        "t1",
+        "t2",
+        "t3",
+        "t4"
+      ],
       "settings": {}
     },
-    "news": { "type": "newsletter", "settings": {} }
+    "news": {
+      "type": "newsletter",
+      "settings": {}
+    },
+    "brands": {
+      "type": "brand-hub",
+      "blocks": {
+        "b1": {
+          "type": "brand",
+          "settings": {
+            "label": "Stone Island"
+          }
+        },
+        "b2": {
+          "type": "brand",
+          "settings": {
+            "label": "Burberry"
+          }
+        },
+        "b3": {
+          "type": "brand",
+          "settings": {
+            "label": "Dior"
+          }
+        }
+      },
+      "block_order": [
+        "b1",
+        "b2",
+        "b3"
+      ],
+      "settings": {}
+    }
   },
-  "order": ["hero", "marquee", "new", "cats", "editorial", "best", "marquee2", "trust", "news"]
+  "order": [
+    "hero",
+    "marquee",
+    "new",
+    "brands",
+    "editorial",
+    "best",
+    "marquee2",
+    "trust",
+    "news"
+  ]
 }

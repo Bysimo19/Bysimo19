@@ -19,6 +19,47 @@
     <div style="display:flex;align-items:center;gap:4px">
       <button class="icon-btn menu-toggle" data-open="MenuDrawer" aria-label="Menú">{% render 'icon', name: 'menu' %}</button>
       <ul class="header__nav" role="list">
+        {%- if section.blocks.size > 0 -%}
+          <li class="has-mega" data-mega>
+            <a class="link-u mega-trigger" href="{{ routes.collections_url }}" aria-haspopup="true" aria-expanded="false" aria-controls="Mega-{{ section.id }}">{{ section.settings.mega_label }}</a>
+            <div class="mega" id="Mega-{{ section.id }}">
+              <div class="wrap mega__inner">
+                <ul class="mega__brands" role="list">
+                  {%- for block in section.blocks -%}
+                    {%- assign col = block.settings.collection -%}
+                    <li {{ block.shopify_attributes }}>
+                      <a href="{{ col.url | default: routes.collections_url }}" data-mega-brand="{{ forloop.index0 }}"{% if forloop.first %} class="is-active"{% endif %}>
+                        <span>{{ block.settings.label | default: col.title }}</span>
+                        {%- if col.products_count > 0 -%}<sup class="mono">{{ col.products_count }}</sup>{%- endif -%}
+                      </a>
+                    </li>
+                  {%- endfor -%}
+                  <li class="mega__all"><a class="link-u" href="{{ routes.collections_url }}">Todas las marcas →</a></li>
+                </ul>
+                {%- for block in section.blocks -%}
+                  {%- liquid
+                    assign col = block.settings.collection
+                    assign label = block.settings.label | default: col.title
+                    assign img = block.settings.image | default: col.image | default: col.products.first.featured_image
+                  -%}
+                  <div class="mega__panel" data-mega-panel="{{ forloop.index0 }}"{% unless forloop.first %} hidden{% endunless %}>
+                    <div class="mega__cats">
+                      <span class="mega__eyebrow">{{ label }} — Categorías</span>
+                      <ul role="list">
+                        <li><a href="{{ col.url }}"><span>Ver todo {{ label }}</span></a></li>
+                        {%- if col != blank -%}{% render 'brand-subcats', collection: col, mode: 'links' %}{%- endif -%}
+                      </ul>
+                    </div>
+                    <a class="mega__feature" href="{{ col.url }}">
+                      {%- if img -%}{{ img | image_url: width: 900 | image_tag: loading: 'lazy', widths: '450,700,900', sizes: '28vw', alt: label }}{%- endif -%}
+                      <span class="mega__feature-cap"><small>{{ block.settings.tagline }}</small><b>{{ label }}</b></span>
+                    </a>
+                  </div>
+                {%- endfor -%}
+              </div>
+            </div>
+          </li>
+        {%- endif -%}
         {%- for link in menu.links -%}
           <li>
             <a class="link-u{% if link.active or link.child_active %} is-active{% endif %}" href="{{ link.url }}">{{ link.title }}</a>
@@ -62,6 +103,23 @@
       <button class="icon-btn" data-close aria-label="Cerrar">{% render 'icon', name: 'close' %}</button>
     </div>
     <div class="drawer__body mnav">
+      {%- if section.blocks.size > 0 -%}
+        <details open>
+          <summary>{{ section.settings.mega_label }} <span>+</span></summary>
+          <div class="sub mnav__brands">
+            {%- for block in section.blocks -%}
+              {%- assign col = block.settings.collection -%}
+              <details>
+                <summary>{{ block.settings.label | default: col.title }} <span>+</span></summary>
+                <ul class="mnav__cats" role="list">
+                  <li><a href="{{ col.url }}">Ver todo</a></li>
+                  {%- if col != blank -%}{% render 'brand-subcats', collection: col, mode: 'links' %}{%- endif -%}
+                </ul>
+              </details>
+            {%- endfor -%}
+          </div>
+        </details>
+      {%- endif -%}
       {%- for link in menu.links -%}
         {%- if link.links.size > 0 -%}
           <details>
@@ -91,7 +149,20 @@
     { "type": "image_picker", "id": "logo", "label": "Logo (opcional, si no se usa el nombre de la tienda)" },
     { "type": "range", "id": "logo_width", "label": "Ancho del logo", "min": 60, "max": 240, "step": 10, "unit": "px", "default": 130 },
     { "type": "link_list", "id": "menu", "label": "Menú", "default": "main-menu" },
+    { "type": "text", "id": "mega_label", "label": "Texto del menú de marcas", "default": "Marcas" },
     { "type": "text", "id": "announcement", "label": "Barra de avisos", "info": "Separa mensajes con |", "default": "Envío gratis desde 100 € | 100% auténtico, verificado a mano | Devoluciones en 14 días" }
+  ],
+  "blocks": [
+    {
+      "type": "brand",
+      "name": "Marca (menú)",
+      "settings": [
+        { "type": "collection", "id": "collection", "label": "Colección de la marca" },
+        { "type": "text", "id": "label", "label": "Nombre (opcional)" },
+        { "type": "text", "id": "tagline", "label": "Texto de la foto", "default": "Nueva colección" },
+        { "type": "image_picker", "id": "image", "label": "Foto destacada (opcional)" }
+      ]
+    }
   ]
 }
 {% endschema %}

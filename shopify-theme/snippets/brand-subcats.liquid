@@ -1,0 +1,77 @@
+{%- comment -%}
+  Subcategorías de una marca, a partir de la lista global (Ajustes del tema → Marcas y categorías)
+  y de las etiquetas de los productos de la colección.
+  Uso:
+    {% render 'brand-subcats', collection: col, mode: 'links' %}           → <li><a>…</a></li> (menú)
+    {% render 'brand-subcats', collection: col, mode: 'tiles', limit: 8 %} → tarjetas con foto y nº de artículos (portada)
+    {% render 'brand-subcats', collection: col, mode: 'chips' %}           → pestañas de la página de colección
+{%- endcomment -%}
+{%- liquid
+  assign names = settings.subcategories | newline_to_br | replace: '<br />', ',' | split: ','
+  assign limit = limit | default: 99
+  assign shown = 0
+  assign current_handle = current_tags.first | handleize
+-%}
+{%- for raw in names -%}
+  {%- liquid
+    assign name = raw | strip
+    if name == blank
+      continue
+    endif
+    if shown >= limit
+      break
+    endif
+    assign handle = name | handleize
+    assign present = false
+    for t in collection.all_tags
+      assign th = t | handleize
+      if th == handle
+        assign present = true
+        break
+      endif
+    endfor
+    if present == false and settings.subcategories_hide_empty and request.design_mode == false
+      continue
+    endif
+    assign url = collection.url | append: '/' | append: handle
+    assign shown = shown | plus: 1
+  -%}
+  {%- case mode -%}
+    {%- when 'links' -%}
+      <li><a href="{{ url }}"><span>{{ name }}</span></a></li>
+    {%- when 'chips' -%}
+      <a class="chip{% if current_handle == handle %} is-active{% endif %}" href="{{ url }}"{% if current_handle == handle %} aria-current="page"{% endif %}>{{ name }}</a>
+    {%- when 'tiles' -%}
+      {%- liquid
+        assign count = 0
+        assign img = nil
+        for p in collection.products limit: 50
+          for t in p.tags
+            assign th = t | handleize
+            if th == handle
+              assign count = count | plus: 1
+              if img == nil and p.featured_image
+                assign img = p.featured_image
+              endif
+              break
+            endif
+          endfor
+        endfor
+      -%}
+      {%- if img -%}
+        <a class="bh-tile reveal" href="{{ url }}" style="--i: {{ shown }}">
+          <span class="bh-tile__media">{{ img | image_url: width: 700 | image_tag: loading: 'lazy', widths: '300,500,700', sizes: '(min-width: 860px) 18vw, 45vw', alt: name }}</span>
+          <span class="bh-tile__label"><b>{{ name }}</b><small>{{ count }}{% if count >= 50 %}+{% endif %} artículos</small></span>
+          <span class="bh-tile__arrow" aria-hidden="true">→</span>
+        </a>
+      {%- else -%}
+        {%- capture more_links -%}{{ more_links }}<a class="chip" href="{{ url }}">{{ name }}{% if count > 0 %} <small>{{ count }}</small>{% endif %}</a>{%- endcapture -%}
+      {%- endif -%}
+  {%- endcase -%}
+{%- endfor -%}
+{%- if mode == 'tiles' and more_links != blank -%}
+  <div class="bh-more reveal">
+    <span class="bh-more__label">También en {{ collection.title }}</span>
+    <div class="bh-more__links">{{ more_links }}</div>
+  </div>
+{%- endif -%}
