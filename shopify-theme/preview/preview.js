@@ -131,24 +131,31 @@
     { t: 'Sudadera Garment Dyed', img: 'si-conjunto', img2: 'si-sudadera-beige', p: 175, colors: 3 },
     { t: 'Pantalón Fleece Garment Dyed', img: 'si-pantalon-negro', img2: 'si-conjunto', p: 155, colors: 3 },
   ];
-  document.querySelectorAll('[data-demo-si]').forEach((el) => {
-    el.innerHTML = SI.map((it, i) => {
+  const CG = [
+    { t: 'Plumífero Crofton', img: 'cg-plumiferos-mate', img2: 'cg-plumifero-oliva', p: 695, colors: 2, tag: 'top', brand: 'Canada Goose' },
+    { t: 'Plumífero Lawrence', img: 'cg-plumiferos-navy', img2: 'cg-plumifero-navy', p: 745, colors: 2, brand: 'Canada Goose' },
+    { t: 'Plumífero con capucha Crofton Hoody', img: 'cg-plumiferos-capucha', img2: 'cg-plumifero-capucha-negro', p: 850, c: 950, colors: 2, brand: 'Canada Goose' },
+    { t: 'Plumífero Everett brillo', img: 'cg-plumiferos-brillo', img2: 'cg-plumifero-brillo-gris', p: 795, colors: 2, tag: 'new', brand: 'Canada Goose' },
+    { t: 'Pantalón Huron Fleece', img: 'cg-pantalones', img2: 'cg-pantalon-negro', p: 225, colors: 2, brand: 'Canada Goose' },
+  ];
+  const render = (list) => list.map((it, i) => {
       const off = it.c ? Math.round((1 - it.p / it.c) * 100) : 0;
       const badges = (off ? `<span class="badge badge--sale">-${off}%</span>` : '') + (it.tag === 'new' ? '<span class="badge badge--new">Nuevo</span>' : '') + (it.tag === 'top' ? '<span class="badge">Top ventas</span>' : '');
       return `<article class="card reveal" style="--i:${i}">
         <a class="card__media" href="producto.html">
-          <img class="card__img" src="img/${it.img}.webp" alt="Stone Island ${it.t}" loading="lazy">
+          <img class="card__img" src="img/${it.img}.webp" alt="${it.brand || 'Stone Island'} ${it.t}" loading="lazy">
           <img class="card__img2" src="img/${it.img2}.webp" alt="" loading="lazy">
           <div class="card__badges">${badges}</div>
           <div class="card__quick"><span>S</span><span>M</span><span>L</span><span${i % 2 ? ' class="na"' : ''}>XL</span></div>
         </a>
         <div class="card__info">
-          <div><div class="card__vendor">Stone Island</div><a class="card__title" href="producto.html">${it.t}</a><div class="card__colors">${it.colors} colores</div></div>
+          <div><div class="card__vendor">${it.brand || 'Stone Island'}</div><a class="card__title" href="producto.html">${it.t}</a><div class="card__colors">${it.colors} colores</div></div>
           <div class="price${it.c ? ' price--sale' : ''}">${it.c ? `<s>${fmt(it.c)}</s>` : ''}${fmt(it.p)}</div>
         </div>
       </article>`;
     }).join('');
-  });
+  document.querySelectorAll('[data-demo-si]').forEach((el) => { el.innerHTML = render(SI); });
+  document.querySelectorAll('[data-demo-cg]').forEach((el) => { el.innerHTML = render(CG); });
 
   document.querySelectorAll('[data-demo-img]').forEach((el) => { el.src = imgs[Number(el.dataset.demoImg)]; });
   document.querySelectorAll('[data-demo-img2]').forEach((el) => { el.src = imgs2[Number(el.dataset.demoImg2)]; });
