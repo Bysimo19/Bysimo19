@@ -142,6 +142,13 @@
     { t: 'Abrigo largo Byward Black Label', img: 'cg-abrigo-largo', img2: 'cg-abrigo-largo-z', p: 1095, c: 1250, colors: 1, brand: 'Canada Goose' },
     { t: 'Pantalón Huron Fleece', img: 'cg-pantalones', img2: 'cg-pantalon-negro', p: 225, colors: 2, brand: 'Canada Goose' },
   ];
+  const LC = [
+    { t: 'Sudadera con capucha Croco', img: 'lc-sudaderas', img2: 'lc-sudadera-verde', p: 129, colors: 3, tag: 'top', brand: 'Lacoste' },
+    { t: 'Chándal Sport completo', img: 'lc-chandal', img2: 'lc-chandal-rojo', p: 189, c: 220, colors: 3, brand: 'Lacoste' },
+    { t: 'Plumífero ligero con capucha', img: 'lc-plumiferos', img2: 'lc-plumifero-navy', p: 249, colors: 3, tag: 'new', brand: 'Lacoste' },
+    { t: 'Chaqueta de punto con capucha', img: 'lc-punto-capucha', img2: 'lc-punto-negro', p: 165, colors: 2, brand: 'Lacoste' },
+    { t: 'Set gorro y bufanda', img: 'lc-gorros-bufandas', img2: 'lc-gorro-negro', p: 89, colors: 4, brand: 'Lacoste' },
+  ];
   const render = (list) => list.map((it, i) => {
       const off = it.c ? Math.round((1 - it.p / it.c) * 100) : 0;
       const badges = (off ? `<span class="badge badge--sale">-${off}%</span>` : '') + (it.tag === 'new' ? '<span class="badge badge--new">Nuevo</span>' : '') + (it.tag === 'top' ? '<span class="badge">Top ventas</span>' : '');
@@ -159,6 +166,7 @@
       </article>`;
     }).join('');
   document.querySelectorAll('[data-demo-si]').forEach((el) => { el.innerHTML = render(SI); });
+  document.querySelectorAll('[data-demo-lc]').forEach((el) => { el.innerHTML = render(LC); });
   document.querySelectorAll('[data-demo-cg]').forEach((el) => { el.innerHTML = render(CG); });
 
   document.querySelectorAll('[data-demo-img]').forEach((el) => { el.src = imgs[Number(el.dataset.demoImg)]; });
