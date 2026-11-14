@@ -147,6 +147,11 @@
     { t: 'Chándal Sport completo', img: 'lc-chandal', img2: 'lc-chandal-rojo', p: 189, c: 220, colors: 3, brand: 'Lacoste' },
     { t: 'Plumífero ligero con capucha', img: 'lc-plumiferos', img2: 'lc-plumifero-navy', p: 249, colors: 3, tag: 'new', brand: 'Lacoste' },
     { t: 'Chaqueta de punto con capucha', img: 'lc-punto-capucha', img2: 'lc-punto-negro', p: 165, colors: 2, brand: 'Lacoste' },
+    { t: 'Camiseta Paris oversize', img: 'lc-camiseta-paris', img2: 'lc-camiseta-paris-negra', p: 69, colors: 3, tag: 'new', brand: 'Lacoste' },
+    { t: 'Camiseta básica cocodrilo', img: 'lc-camisetas-basicas', img2: 'lc-camiseta-verde', p: 55, colors: 7, tag: 'top', brand: 'Lacoste' },
+    { t: 'Polo Sport técnico', img: 'lc-polos-sport', img2: 'lc-polo-navy', p: 95, colors: 6, brand: 'Lacoste' },
+    { t: 'Polo monograma jacquard', img: 'lc-polos-monograma', img2: 'lc-polo-monograma-azul', p: 125, c: 145, colors: 3, brand: 'Lacoste' },
+    { t: 'Chaqueta track con logo', img: 'lc-chaqueta-track', img2: 'lc-chaqueta-track-navy', p: 179, colors: 3, brand: 'Lacoste' },
     { t: 'Set gorro y bufanda', img: 'lc-gorros-bufandas', img2: 'lc-gorro-negro', p: 89, colors: 4, brand: 'Lacoste' },
   ];
   const render = (list) => list.map((it, i) => {
