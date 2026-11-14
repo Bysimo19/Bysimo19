@@ -684,3 +684,4 @@ body.mega-on .mega-backdrop { opacity: 1; }
 .bh-more .chip small { margin-left: 8px; color: var(--muted); font-size: 11px; }
 .bh-more .chip:hover small { color: inherit; }
 [hidden] { display: none !important; }
+.demo-note { height: 33px; line-height: 17px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; background: var(--accent); color: var(--accent-fg); text-align: center; font-size: 12px; font-weight: 600; letter-spacing: 0.04em; padding: 8px 16px; position: relative; z-index: 60; }

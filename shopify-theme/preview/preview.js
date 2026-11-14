@@ -159,6 +159,13 @@
     { t: 'Pantalón chino slim', cat: 'Pantalones', img: 'lc-chinos', img2: 'lc-chino-beige', p: 115, c: 135, colors: 3, brand: 'Lacoste' },
     { t: 'Set gorro y bufanda', cat: 'Gorros', img: 'lc-gorros-bufandas', img2: 'lc-gorro-negro', p: 89, colors: 4, brand: 'Lacoste' },
   ];
+  const CP = [
+    { t: 'Chaqueta híbrida punto y plumón', cat: 'Chaquetas', img: 'cp-hibrida-punto', img2: 'cp-hibrida-negra', p: 495, colors: 3, tag: 'new', brand: 'C.P. Company' },
+    { t: 'Plumífero D.D. Shell cuadros', cat: 'Plumíferos', img: 'cp-plumifero-cuadros', img2: 'cp-cuadros-oliva', p: 545, colors: 3, brand: 'C.P. Company' },
+    { t: 'Plumífero con capucha Lens', cat: 'Plumíferos', img: 'cp-plumifero-capucha', img2: 'cp-capucha-oliva', p: 520, c: 590, colors: 3, brand: 'C.P. Company' },
+    { t: 'Parka acolchada Nycra', cat: 'Parkas', img: 'cp-parka-acolchada', img2: 'cp-parka-oliva', p: 610, colors: 3, brand: 'C.P. Company' },
+    { t: 'Plumífero Goggle', cat: 'Plumíferos', img: 'cp-goggle-plumifero', img2: 'cp-goggle-oliva', p: 650, colors: 3, tag: 'top', brand: 'C.P. Company' },
+  ];
   const render = (list) => list.map((it, i) => {
       const off = it.c ? Math.round((1 - it.p / it.c) * 100) : 0;
       const badges = (off ? `<span class="badge badge--sale">-${off}%</span>` : '') + (it.tag === 'new' ? '<span class="badge badge--new">Nuevo</span>' : '') + (it.tag === 'top' ? '<span class="badge">Top ventas</span>' : '');
@@ -176,6 +183,7 @@
       </article>`;
     }).join('');
   document.querySelectorAll('[data-demo-si]').forEach((el) => { el.innerHTML = render(SI); });
+  document.querySelectorAll('[data-demo-cp]').forEach((el) => { el.innerHTML = render(CP); });
   document.querySelectorAll('[data-demo-lc]').forEach((el) => { el.innerHTML = render(LC); });
   document.querySelectorAll('[data-demo-cg]').forEach((el) => { el.innerHTML = render(CG); });
 
@@ -183,7 +191,7 @@
   document.querySelectorAll('nav.chips').forEach((nav) => {
     nav.addEventListener('click', (e) => {
       const chip = e.target.closest('.chip'); if (!chip) return;
-      const grid = document.querySelector('[data-demo-si],[data-demo-cg],[data-demo-lc]'); if (!grid) return;
+      const grid = document.querySelector('[data-demo-si],[data-demo-cg],[data-demo-lc],[data-demo-cp]'); if (!grid) return;
       e.preventDefault();
       nav.querySelectorAll('.chip').forEach((c) => { c.classList.toggle('is-active', c === chip); c.removeAttribute('aria-current'); });
       chip.setAttribute('aria-current', 'page');
