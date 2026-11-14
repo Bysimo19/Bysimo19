@@ -683,3 +683,4 @@ body.mega-on .mega-backdrop { opacity: 1; }
 .bh-more__links { display: flex; flex-wrap: wrap; gap: 6px; }
 .bh-more .chip small { margin-left: 8px; color: var(--muted); font-size: 11px; }
 .bh-more .chip:hover small { color: inherit; }
+[hidden] { display: none !important; }

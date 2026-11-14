@@ -143,21 +143,26 @@
     { t: 'Pantalón Huron Fleece', img: 'cg-pantalones', img2: 'cg-pantalon-negro', p: 225, colors: 2, brand: 'Canada Goose' },
   ];
   const LC = [
-    { t: 'Sudadera con capucha Croco', img: 'lc-sudaderas', img2: 'lc-sudadera-verde', p: 129, colors: 3, tag: 'top', brand: 'Lacoste' },
-    { t: 'Chándal Sport completo', img: 'lc-chandal', img2: 'lc-chandal-rojo', p: 189, c: 220, colors: 3, brand: 'Lacoste' },
-    { t: 'Plumífero ligero con capucha', img: 'lc-plumiferos', img2: 'lc-plumifero-navy', p: 249, colors: 3, tag: 'new', brand: 'Lacoste' },
-    { t: 'Chaqueta de punto con capucha', img: 'lc-punto-capucha', img2: 'lc-punto-negro', p: 165, colors: 2, brand: 'Lacoste' },
-    { t: 'Camiseta Paris oversize', img: 'lc-camiseta-paris', img2: 'lc-camiseta-paris-negra', p: 69, colors: 3, tag: 'new', brand: 'Lacoste' },
-    { t: 'Camiseta básica cocodrilo', img: 'lc-camisetas-basicas', img2: 'lc-camiseta-verde', p: 55, colors: 7, tag: 'top', brand: 'Lacoste' },
-    { t: 'Polo Sport técnico', img: 'lc-polos-sport', img2: 'lc-polo-navy', p: 95, colors: 6, brand: 'Lacoste' },
-    { t: 'Polo monograma jacquard', img: 'lc-polos-monograma', img2: 'lc-polo-monograma-azul', p: 125, c: 145, colors: 3, brand: 'Lacoste' },
-    { t: 'Chaqueta track con logo', img: 'lc-chaqueta-track', img2: 'lc-chaqueta-track-navy', p: 179, colors: 3, brand: 'Lacoste' },
-    { t: 'Set gorro y bufanda', img: 'lc-gorros-bufandas', img2: 'lc-gorro-negro', p: 89, colors: 4, brand: 'Lacoste' },
+    { t: 'Sudadera con capucha Croco', cat: 'Sudaderas', img: 'lc-sudaderas', img2: 'lc-sudadera-verde', p: 129, colors: 3, tag: 'top', brand: 'Lacoste' },
+    { t: 'Chándal Sport completo', cat: 'Chándals', img: 'lc-chandal', img2: 'lc-chandal-rojo', p: 189, c: 220, colors: 3, brand: 'Lacoste' },
+    { t: 'Plumífero ligero con capucha', cat: 'Plumíferos', img: 'lc-plumiferos', img2: 'lc-plumifero-navy', p: 249, colors: 3, tag: 'new', brand: 'Lacoste' },
+    { t: 'Chaqueta de punto con capucha', cat: 'Punto', img: 'lc-punto-capucha', img2: 'lc-punto-negro', p: 165, colors: 2, brand: 'Lacoste' },
+    { t: 'Camiseta Paris oversize', cat: 'Camisetas', img: 'lc-camiseta-paris', img2: 'lc-camiseta-paris-negra', p: 69, colors: 3, tag: 'new', brand: 'Lacoste' },
+    { t: 'Camiseta básica cocodrilo', cat: 'Camisetas', img: 'lc-camisetas-basicas', img2: 'lc-camiseta-verde', p: 55, colors: 7, tag: 'top', brand: 'Lacoste' },
+    { t: 'Polo Sport técnico', cat: 'Polos', img: 'lc-polos-sport', img2: 'lc-polo-navy', p: 95, colors: 6, brand: 'Lacoste' },
+    { t: 'Polo monograma jacquard', cat: 'Polos', img: 'lc-polos-monograma', img2: 'lc-polo-monograma-azul', p: 125, c: 145, colors: 3, brand: 'Lacoste' },
+    { t: 'Chaqueta track con logo', cat: 'Chaquetas', img: 'lc-chaqueta-track', img2: 'lc-chaqueta-track-navy', p: 179, colors: 3, brand: 'Lacoste' },
+    { t: 'Polo clásico L.12.12', cat: 'Polos', img: 'lc-polos-clasicos', img2: 'lc-polo-verde', p: 99, colors: 8, tag: 'top', brand: 'Lacoste' },
+    { t: 'Camiseta cocodrilo grande', cat: 'Camisetas', img: 'lc-camiseta-croco-grande', img2: 'lc-camiseta-croco-negra', p: 65, colors: 7, brand: 'Lacoste' },
+    { t: 'Camiseta logo Paris', cat: 'Camisetas', img: 'lc-camiseta-paris-logo', img2: 'lc-camiseta-paris-negra2', p: 59, colors: 5, tag: 'new', brand: 'Lacoste' },
+    { t: 'Camiseta básica algodón pima', cat: 'Camisetas', img: 'lc-camiseta-basica-2', img2: 'lc-camiseta-negra', p: 49, colors: 7, brand: 'Lacoste' },
+    { t: 'Pantalón chino slim', cat: 'Pantalones', img: 'lc-chinos', img2: 'lc-chino-beige', p: 115, c: 135, colors: 3, brand: 'Lacoste' },
+    { t: 'Set gorro y bufanda', cat: 'Gorros', img: 'lc-gorros-bufandas', img2: 'lc-gorro-negro', p: 89, colors: 4, brand: 'Lacoste' },
   ];
   const render = (list) => list.map((it, i) => {
       const off = it.c ? Math.round((1 - it.p / it.c) * 100) : 0;
       const badges = (off ? `<span class="badge badge--sale">-${off}%</span>` : '') + (it.tag === 'new' ? '<span class="badge badge--new">Nuevo</span>' : '') + (it.tag === 'top' ? '<span class="badge">Top ventas</span>' : '');
-      return `<article class="card reveal" style="--i:${i}">
+      return `<article class="card reveal" style="--i:${i}" data-cat="${it.cat || ''}">
         <a class="card__media" href="producto.html">
           <img class="card__img" src="img/${it.img}.webp" alt="${it.brand || 'Stone Island'} ${it.t}" loading="lazy">
           <img class="card__img2" src="img/${it.img2}.webp" alt="" loading="lazy">
@@ -173,6 +178,26 @@
   document.querySelectorAll('[data-demo-si]').forEach((el) => { el.innerHTML = render(SI); });
   document.querySelectorAll('[data-demo-lc]').forEach((el) => { el.innerHTML = render(LC); });
   document.querySelectorAll('[data-demo-cg]').forEach((el) => { el.innerHTML = render(CG); });
+
+  // Pestañas de categoría: filtran los productos de la página de marca
+  document.querySelectorAll('nav.chips').forEach((nav) => {
+    nav.addEventListener('click', (e) => {
+      const chip = e.target.closest('.chip'); if (!chip) return;
+      const grid = document.querySelector('[data-demo-si],[data-demo-cg],[data-demo-lc]'); if (!grid) return;
+      e.preventDefault();
+      nav.querySelectorAll('.chip').forEach((c) => { c.classList.toggle('is-active', c === chip); c.removeAttribute('aria-current'); });
+      chip.setAttribute('aria-current', 'page');
+      const cat = chip.textContent.trim();
+      let n = 0;
+      grid.querySelectorAll('.card').forEach((card) => {
+        const show = cat === 'Todo' || card.dataset.cat === cat;
+        card.hidden = !show; if (show) { card.style.setProperty('--i', n++ % 8); card.classList.remove('is-in'); void card.offsetWidth; card.classList.add('is-in'); }
+      });
+      let empty = grid.parentElement.querySelector('.empty');
+      if (!n) { if (!empty) { empty = document.createElement('div'); empty.className = 'empty'; grid.after(empty); } empty.innerHTML = '<p class="h3">Próximamente</p><p class="muted">Aún no hay piezas en ' + cat + '.</p>'; empty.hidden = false; }
+      else if (empty) empty.hidden = true;
+    });
+  });
 
   document.querySelectorAll('[data-demo-img]').forEach((el) => { el.src = imgs[Number(el.dataset.demoImg)]; });
   document.querySelectorAll('[data-demo-img2]').forEach((el) => { el.src = imgs2[Number(el.dataset.demoImg2)]; });
